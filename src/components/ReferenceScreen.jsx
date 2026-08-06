@@ -4,10 +4,12 @@ import TabBar from "./TabBar.jsx";
 import FormulasPanel from "./reference/FormulasPanel.jsx";
 import WissenPanel from "./reference/WissenPanel.jsx";
 import CardsPanel from "./reference/CardsPanel.jsx";
+import RechnerPanel from "./reference/rechner/RechnerPanel.jsx";
 import SearchResults from "./reference/SearchResults.jsx";
 
 const SEGMENTE = [
   { id: "formeln", label: "📐 Formeln" },
+  { id: "rechner", label: "🧮 Rechner" },
   { id: "wissen", label: "📖 Wissen" },
   { id: "karten", label: "🃏 Karten" },
 ];
@@ -20,7 +22,7 @@ export default function ReferenceScreen({ progress, onTabWechsel }) {
     <>
       <Header streak={progress.state.streak.count} level={progress.level} />
       <div className="screen-titel">Nachschlagen</div>
-      <div className="sel-line">Formeln &amp; Tabellen, Lernfeld-Wissen oder alle Karten</div>
+      <div className="sel-line">Formeln, Rechner &amp; Tabellen, Lernfeld-Wissen oder alle Karten</div>
       <input
         className="such"
         type="search"
@@ -50,6 +52,8 @@ export default function ReferenceScreen({ progress, onTabWechsel }) {
         <SearchResults query={query} />
       ) : seg === "formeln" ? (
         <FormulasPanel />
+      ) : seg === "rechner" ? (
+        <RechnerPanel />
       ) : seg === "wissen" ? (
         <WissenPanel />
       ) : (

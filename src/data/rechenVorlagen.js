@@ -9,6 +9,7 @@
 //   { frage, loesung, einheit, weg, toleranz? }
 
 import { runde } from "../lib/rechnen.js";
+import { SICHERUNG_REIHE } from "./vde.js";
 
 const KAPPA_CU = 56; // Leitwert Kupfer in m/(Ω·mm²)
 const RHO_CU = 0.0178; // spezifischer Widerstand Kupfer in Ω·mm²/m
@@ -322,6 +323,82 @@ export const RECHEN_VORLAGEN = [
         loesung: U2,
         einheit: "V",
         weg: `U1/U2 = N1/N2 → U2 = U1 · N2 / N1 = ${U1} · ${N2} / ${N1} = ${z(U2)} V`,
+      };
+    },
+  },
+  {
+    id: "spannungsfall-prozent",
+    titel: "Spannungsfall in Prozent",
+    lf: "LF2",
+    bau(rng) {
+      const l = ausListe([15, 20, 25, 30, 40], rng);
+      const I = ausListe([10, 13, 16, 20], rng);
+      const A = ausListe([1.5, 2.5, 4], rng);
+      const dU = (2 * l * I) / (KAPPA_CU * A);
+      const prozent = (dU / 230) * 100;
+      return {
+        frage: `Wechselstromkreis 230 V: Länge ${l} m, Strom ${I} A, Querschnitt ${z(A, 1)} mm², κ = 56. Wie groß ist der Spannungsfall in Prozent?`,
+        loesung: prozent,
+        einheit: "%",
+        toleranz: 0.03,
+        weg: `ΔU = (2 · l · I) / (κ · A) = (2 · ${l} · ${I}) / (56 · ${z(A, 1)}) = ${z(dU)} V\nΔu = ΔU / 230 V · 100 % = ${z(prozent)} %`,
+      };
+    },
+  },
+  {
+    id: "leistung-drehstrom-i",
+    titel: "Strom aus Drehstromleistung",
+    lf: "LF5",
+    bau(rng) {
+      const P = ausListe([4000, 5500, 7500, 11000, 15000], rng);
+      const U = 400;
+      const cos = ausListe([0.8, 0.85, 0.9], rng);
+      const I = P / (Math.sqrt(3) * U * cos);
+      return {
+        frage: `Ein Drehstromverbraucher nimmt ${P} W bei ${U} V auf (cos φ = ${z(cos, 2)}). Wie groß ist der Strom I?`,
+        loesung: I,
+        einheit: "A",
+        toleranz: 0.02,
+        weg: `I = P / (√3 · U · cos φ) = ${P} / (1,732 · ${U} · ${z(cos, 2)}) = ${z(I)} A`,
+      };
+    },
+  },
+  {
+    id: "iz-korrektur",
+    titel: "Strombelastbarkeit mit Korrekturfaktoren",
+    lf: "LF2",
+    bau(rng) {
+      const iz = ausListe([20, 24, 27, 32, 41], rng);
+      const fTemp = ausListe([0.94, 0.87, 1.06], rng);
+      const fHaeuf = ausListe([0.8, 0.7, 0.65], rng);
+      const izKorr = iz * fTemp * fHaeuf;
+      return {
+        frage: `Ein Kabel hat Iz = ${iz} A. Umrechnungsfaktoren: Temperatur ${z(fTemp, 2)}, Häufung ${z(fHaeuf, 2)}. Wie groß ist die korrigierte Strombelastbarkeit?`,
+        loesung: izKorr,
+        einheit: "A",
+        toleranz: 0.02,
+        weg: `Iz' = Iz · fTemp · fHäufung = ${iz} · ${z(fTemp, 2)} · ${z(fHaeuf, 2)} = ${z(izKorr)} A`,
+      };
+    },
+  },
+  {
+    id: "sicherungswahl",
+    titel: "Passende Normsicherung wählen",
+    lf: "LF3",
+    bau(rng) {
+      // In direkt wählen, dann I_B darunter und Iz knapp darüber (unter dem
+      // nächsten Normwert), damit genau dieses In die richtige Antwort bleibt.
+      const naechste = { 10: 13, 16: 20, 20: 25, 25: 32 };
+      const In = ausListe([10, 16, 20, 25], rng);
+      const Ib = In - ausListe([1, 2, 3], rng);
+      const iz = Math.min(In + ausListe([0, 1, 2], rng), naechste[In] - 1);
+      const reihe = SICHERUNG_REIHE.filter((w) => w <= 32).join(", ");
+      return {
+        frage: `Betriebsstrom I_B = ${Ib} A, Kabel-Belastbarkeit Iz = ${iz} A. Welcher LS-Nennstrom passt (Normreihe: ${reihe})? Regel: I_B ≤ I_n ≤ Iz.`,
+        loesung: In,
+        einheit: "A",
+        toleranz: 0.02,
+        weg: `Größter Normwert mit I_B ≤ I_n ≤ Iz: ${Ib} A ≤ I_n ≤ ${iz} A ⇒ I_n = ${In} A`,
       };
     },
   },
