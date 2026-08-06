@@ -715,6 +715,39 @@ details.ref .ref-body{padding:0 15px 13px;color:var(--text);font-size:.92rem;lin
 .dialog-btn:active{transform:scale(.97)}
 @media(hover:hover){.dialog-btn:hover{filter:brightness(1.08)}}
 
+/* ---------- Verspielte Lern-Animationen (reduce-motion killt sie global) ---------- */
+@keyframes tada{0%{transform:scale(1) rotate(0)}15%{transform:scale(1.28) rotate(-7deg)}
+  30%{transform:scale(1.28) rotate(7deg)}45%{transform:scale(1.16) rotate(-5deg)}
+  60%{transform:scale(1.16) rotate(5deg)}80%{transform:scale(1.06) rotate(-2deg)}
+  100%{transform:scale(1) rotate(0)}}
+@keyframes bounceIn{0%{transform:scale(.9);opacity:.35}55%{transform:scale(1.05)}
+  100%{transform:scale(1);opacity:1}}
+@keyframes flame{0%,100%{transform:scale(1) rotate(-4deg)}50%{transform:scale(1.2) rotate(4deg)}}
+.result .big{animation:tada .95s var(--ease) both}
+.flame{display:inline-block;transform-origin:50% 90%;animation:flame 1.5s ease-in-out infinite}
+.rechen-feedback.ok{animation:bounceIn .5s var(--ease) both}
+.rechen-feedback.bad{animation:shake .42s var(--ease) both}
+.opt.correct{animation:bounceIn .45s var(--ease) both}
+.opt.wrong{animation:shake .42s var(--ease) both}
+
+/* ---------- Tastenkürzel-Hilfe ---------- */
+.dialog.keyhelp{max-width:420px}
+.keyhelp-body{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;margin-bottom:18px}
+@media(max-width:420px){.keyhelp-body{grid-template-columns:1fr}}
+.kh-gruppe{min-width:0}
+.kh-titel{font-size:.72rem;text-transform:uppercase;letter-spacing:.7px;color:var(--accent2);
+  font-weight:800;margin-bottom:6px}
+.kh-zeile{display:flex;align-items:center;gap:8px;font-size:.84rem;line-height:1.5;margin-bottom:5px}
+.kh-key{flex-shrink:0;min-width:26px;text-align:center;background:var(--card2);border:1px solid var(--gb2);
+  border-bottom-width:2px;border-radius:7px;padding:2px 6px;font-family:inherit;font-size:.76rem;
+  font-weight:700;color:var(--text)}
+.keyhelp-hint{position:fixed;right:14px;bottom:calc(var(--tabbar-h,64px) + 12px);z-index:80;
+  width:38px;height:38px;border-radius:50%;background:var(--card);border:1px solid var(--gb2);
+  color:var(--muted);font-size:1rem;cursor:pointer;display:none;align-items:center;justify-content:center;
+  transition:color .2s var(--ease),border-color .2s var(--ease)}
+@media(hover:hover) and (pointer:fine){.keyhelp-hint{display:flex}
+  .keyhelp-hint:hover{color:var(--text);border-color:rgba(59,130,246,.5)}}
+
 /* ---------- Geräte-Sync-Panel (Konto) ---------- */
 .konto{background:var(--card);border:1px solid var(--gb);border-radius:16px;
   padding:14px 16px;margin:6px 0 18px}

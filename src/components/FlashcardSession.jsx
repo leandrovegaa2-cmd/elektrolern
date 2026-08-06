@@ -47,6 +47,12 @@ export default function FlashcardSession({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fertig]);
 
+  // Karte automatisch fokussieren, sobald eine neue erscheint oder aufgedeckt
+  // wird — sonst wären Leertaste/Pfeiltasten erst nach einem Mausklick aktiv.
+  useEffect(() => {
+    if (!fertig) cardRef.current?.focus();
+  }, [aufgedeckt, index, fertig]);
+
   if (fertig) return null;
 
   const karte = queue[index];

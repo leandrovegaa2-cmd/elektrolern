@@ -32,7 +32,8 @@ export default function ResultScreen({ ergebnis, streakCount, onNochmal, onFalsc
   }
 
   useEffect(() => {
-    if (quote >= 50) konfetti();
+    // Bei Top-Ergebnis mehr Konfetti — kleine Extra-Belohnung.
+    if (quote >= 50) konfetti(quote >= 80 ? 96 : 46);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -43,7 +44,8 @@ export default function ResultScreen({ ergebnis, streakCount, onNochmal, onFalsc
       <h1>{titel}</h1>
       <p>{text}</p>
       <p>
-        🔥 Streak: {streakCount} Tag{streakCount === 1 ? "" : "e"}
+        <span className="flame" aria-hidden="true">🔥</span> Streak: {streakCount} Tag
+        {streakCount === 1 ? "" : "e"}
       </p>
       {falsche.length ? (
         <button className="next-btn" onClick={() => onFalscheWiederholen(falsche)}>

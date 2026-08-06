@@ -14,6 +14,8 @@ import ResultScreen from "./components/ResultScreen.jsx";
 import ReferenceScreen from "./components/ReferenceScreen.jsx";
 import ProgressScreen from "./components/ProgressScreen.jsx";
 import ConfirmDialog from "./components/ConfirmDialog.jsx";
+import KeyHelp from "./components/KeyHelp.jsx";
+import { useHotkeys } from "./hooks/useHotkeys.js";
 import { PRUEF_ANZAHL, PRUEF_RECHNEN } from "./lib/exam.js";
 
 export default function App() {
@@ -33,9 +35,35 @@ export default function App() {
   const [sessionKey, setSessionKey] = useState(0);
   // In-App-Dialog statt nativem alert()/confirm(). null = kein Dialog offen.
   const [dialog, setDialog] = useState(null);
+  const [hilfeOffen, setHilfeOffen] = useState(false);
 
   function gehHeim() {
     setScreen("home");
+  }
+
+  /** Esc: kontextabhängig zurück / abbrechen (spiegelt die Abbrechen-Knöpfe). */
+  function aufEsc() {
+    switch (screen) {
+      case "lf":
+        return setScreen("home");
+      case "modus":
+        return setScreen(gewaehltesLJ === 0 ? "home" : "lf");
+      case "flash":
+        return setScreen(kartenOverride ? "home" : "modus");
+      case "quiz":
+        return setScreen("modus");
+      case "rechnen":
+        return setScreen(rechenQuelle === "generator" ? "home" : "modus");
+      case "pruefung":
+        return gehHeim();
+      case "editor":
+        return setScreen("stats");
+      case "ref":
+      case "stats":
+        return setScreen("home");
+      default:
+        return;
+    }
   }
 
   function onTabWechsel(tab) {
@@ -158,6 +186,26 @@ export default function App() {
     setSessionKey((k) => k + 1);
     setScreen("rechnen");
   }
+
+  // Globale Tastenkürzel. Buchstaben (nicht Ziffern), damit im Quiz die 1–4
+  // frei bleiben. Während Session nur „?" + Esc, sonst auch die Navigation.
+  const istSession = ["flash", "quiz", "rechnen", "pruefung"].includes(screen);
+  const hotkeys = {
+    "?": () => setHilfeOffen((v) => !v),
+    Escape: aufEsc,
+  };
+  if (!istSession) {
+    hotkeys.l = () => setScreen("home");
+    hotkeys.n = () => setScreen("ref");
+    hotkeys.f = () => setScreen("stats");
+  }
+  if (screen === "home") {
+    hotkeys.s = onSchnellstart;
+    hotkeys.p = onPruefung;
+    hotkeys.r = onRechentrainer;
+  }
+  // Bei offenem Dialog/Hilfe übernehmen diese ihre eigene Tastatur (Esc etc.).
+  useHotkeys(hotkeys, !dialog && !hilfeOffen);
 
   const screenTitel = {
     home: "Start",
@@ -319,6 +367,17 @@ export default function App() {
           onAbbrechen={dialog.onAbbrechen}
         />
       )}
+
+      <button
+        className="keyhelp-hint"
+        onClick={() => setHilfeOffen(true)}
+        aria-label="Tastenkürzel anzeigen"
+        title="Tastenkürzel (?)"
+      >
+        ⌨️
+      </button>
+
+      {hilfeOffen && <KeyHelp onSchliessen={() => setHilfeOffen(false)} />}
     </div>
   );
 }

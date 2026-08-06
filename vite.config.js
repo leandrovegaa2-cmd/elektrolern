@@ -37,6 +37,20 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        // Selten wechselnde Brocken vom App-Code trennen, damit sie über Deploys
+        // hinweg im Browser-Cache bleiben (App-Code-Update invalidiert sie nicht).
+        // Alles wird statisch importiert und per modulepreload parallel geladen —
+        // also kein Nachlade-Delay, nur bessere Cache-Treffer bei Wiederbesuchen.
+        manualChunks(id) {
+          if (/node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)) return 'vendor'
+          if (/[\\/]src[\\/]data[\\/]/.test(id)) return 'data'
+        },
+      },
+    },
+  },
   test: {
     environment: 'node',
     globals: true,

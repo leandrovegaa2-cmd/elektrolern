@@ -7,11 +7,11 @@ export function reduzierteBewegung() {
   return typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-export function konfetti() {
+export function konfetti(anzahl = 46) {
   if (reduzierteBewegung()) return;
   const box = document.createElement("div");
   box.className = "konfetti";
-  for (let i = 0; i < 46; i++) {
+  for (let i = 0; i < anzahl; i++) {
     const s = document.createElement("i");
     s.style.left = Math.random() * 100 + "%";
     s.style.background = FARBEN[i % FARBEN.length];
