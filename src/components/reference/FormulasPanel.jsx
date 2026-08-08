@@ -1,5 +1,7 @@
 import { FORMELN } from "../../data/formeln.js";
 import { LEITERFARBEN, SICHERHEITSREGELN, FAUSTWERTE, SCHUTZKLASSEN, IP_BEISPIEL } from "../../data/tabellen.js";
+import { SCHALTZEICHEN } from "../../data/schaltzeichen.js";
+import Diagram from "../Diagram.jsx";
 
 function FarbChip({ farbe }) {
   if (farbe === "pe") {
@@ -114,6 +116,41 @@ export default function FormulasPanel() {
               <small>{IP_BEISPIEL.zweite.label}</small>
             </span>
           </div>
+        </div>
+      </details>
+
+      <details className="ref">
+        <summary>
+          🔌 Schaltzeichen<span className="ref-sub">{SCHALTZEICHEN.length} Symbole erkennen</span>
+        </summary>
+        <div className="ref-body w">
+          <div className="sz-grid">
+            {SCHALTZEICHEN.map((s) => (
+              <div className="sz-cell" key={s.name}>
+                <div className="sz-sym" dangerouslySetInnerHTML={{ __html: s.svg }} />
+                <b>{s.label}</b>
+                <span>{s.bedeutung}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </details>
+
+      <details className="ref">
+        <summary>
+          🗄️ Verteileraufbau<span className="ref-sub">Hauptschalter · FI · LS</span>
+        </summary>
+        <div className="ref-body w">
+          <Diagram name="verteiler" />
+        </div>
+      </details>
+
+      <details className="ref">
+        <summary>
+          🎨 Leitungsquerschnitt<span className="ref-sub">NYM-J 5-adrig</span>
+        </summary>
+        <div className="ref-body w">
+          <Diagram name="nym5" />
         </div>
       </details>
     </>

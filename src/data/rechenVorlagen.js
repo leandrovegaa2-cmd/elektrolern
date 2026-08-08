@@ -402,6 +402,143 @@ export const RECHEN_VORLAGEN = [
       };
     },
   },
+
+  // ---- Praxisnahe Aufgaben (Werkstatt/Baustelle) ----
+  {
+    id: "motor-strom",
+    titel: "Motor-Nennstrom aus Wellenleistung",
+    lf: "LF8",
+    bau(rng) {
+      const P = ausListe([1.5, 2.2, 3, 4, 5.5, 7.5], rng); // kW mechanisch (Typenschild)
+      const U = 400;
+      const cos = ausListe([0.8, 0.82, 0.85], rng);
+      const eta = ausListe([0.8, 0.83, 0.86], rng);
+      const I = (P * 1000) / (Math.sqrt(3) * U * cos * eta);
+      return {
+        frage: `Ein Drehstrommotor hat ${z(P, 1)} kW Wellenleistung an ${U} V (cos φ = ${z(cos, 2)}, η = ${z(eta, 2)}). Welchen Netzstrom nimmt er ungefähr auf?`,
+        loesung: I,
+        einheit: "A",
+        toleranz: 0.03,
+        weg: `I = P / (√3 · U · cos φ · η) = ${P * 1000} W / (1,732 · ${U} · ${z(cos, 2)} · ${z(eta, 2)}) = ${z(I)} A`,
+      };
+    },
+  },
+  {
+    id: "motor-faustformel",
+    titel: "Motorstrom-Faustformel (400 V)",
+    lf: "LF8",
+    bau(rng) {
+      const P = ausListe([1.5, 2.2, 3, 4, 5.5], rng);
+      return {
+        frage: `Faustregel für Drehstrommotoren am 400-V-Netz: „Nennstrom ≈ 2 × Leistung in kW". Wie groß ist der Strom bei ${z(P, 1)} kW ungefähr?`,
+        loesung: 2 * P,
+        einheit: "A",
+        toleranz: 0.05,
+        weg: `I ≈ 2 · P[kW] = 2 · ${z(P, 1)} = ${z(2 * P, 1)} A (Merkwert; genau etwas weniger wegen cos φ und η)`,
+      };
+    },
+  },
+  {
+    id: "heizstrom-3ph",
+    titel: "Strom eines Drehstrom-Heizgeräts",
+    lf: "LF5",
+    bau(rng) {
+      const P = ausListe([11, 15, 18, 21, 24], rng); // kW, z. B. Durchlauferhitzer/Herd
+      const U = 400;
+      const I = (P * 1000) / (Math.sqrt(3) * U); // rein ohmsch, cos φ = 1
+      return {
+        frage: `Ein rein ohmsches Drehstrom-Heizgerät (z. B. Durchlauferhitzer) hat ${P} kW an ${U} V. Wie groß ist der Strom je Außenleiter?`,
+        loesung: I,
+        einheit: "A",
+        toleranz: 0.02,
+        weg: `I = P / (√3 · U) = ${P * 1000} W / (1,732 · ${U} V) = ${z(I)} A`,
+      };
+    },
+  },
+  {
+    id: "anlaufstrom",
+    titel: "Anlaufstrom eines Motors",
+    lf: "LF8",
+    bau(rng) {
+      const In = ausListe([4, 6, 8, 10, 16], rng);
+      const faktor = ausListe([5, 6, 7], rng);
+      return {
+        frage: `Ein Motor hat den Nennstrom ${In} A. Beim Direktanlauf fließt etwa das ${faktor}-fache. Wie groß ist der Anlaufstrom?`,
+        loesung: In * faktor,
+        einheit: "A",
+        weg: `I_A = ${faktor} · I_N = ${faktor} · ${In} A = ${In * faktor} A`,
+      };
+    },
+  },
+  {
+    id: "strangspannung-stern",
+    titel: "Strangspannung in Sternschaltung",
+    lf: "LF8",
+    bau(rng) {
+      const UL = ausListe([400, 230], rng);
+      const Ustr = UL / Math.sqrt(3);
+      return {
+        frage: `In Sternschaltung liegen ${UL} V zwischen den Außenleitern. Wie groß ist die Spannung an einer Wicklung (Strangspannung)?`,
+        loesung: Ustr,
+        einheit: "V",
+        toleranz: 0.02,
+        weg: `U_Str = U_L / √3 = ${UL} V / 1,732 = ${z(Ustr)} V`,
+      };
+    },
+  },
+  {
+    id: "drehmoment",
+    titel: "Drehmoment aus Leistung und Drehzahl",
+    lf: "LF8",
+    bau(rng) {
+      const P = ausListe([1.5, 2.2, 3, 4, 5.5], rng); // kW
+      const n = ausListe([1400, 1440, 2850, 950], rng); // 1/min
+      const M = (9550 * P) / n;
+      return {
+        frage: `Ein Motor gibt ${z(P, 1)} kW bei ${n} 1/min ab. Wie groß ist das Drehmoment? (M = 9550 · P[kW] / n)`,
+        loesung: M,
+        einheit: "Nm",
+        toleranz: 0.02,
+        weg: `M = 9550 · P / n = 9550 · ${z(P, 1)} / ${n} = ${z(M)} Nm`,
+      };
+    },
+  },
+  {
+    id: "motor-jahreskosten",
+    titel: "Stromkosten eines Motors pro Jahr",
+    lf: "LF1",
+    bau(rng) {
+      const P = ausListe([1.5, 2.2, 3, 4], rng); // kW aufgenommen
+      const h = ausListe([500, 1000, 1500, 2000], rng);
+      const cent = ausListe([30, 35, 40], rng);
+      const kosten = P * h * (cent / 100);
+      return {
+        frage: `Ein Motor nimmt ${z(P, 1)} kW auf und läuft ${h} h im Jahr. Bei ${cent} ct/kWh — welche Stromkosten entstehen jährlich?`,
+        loesung: kosten,
+        einheit: "€",
+        toleranz: 0.02,
+        weg: `Kosten = P · t · Preis = ${z(P, 1)} kW · ${h} h · ${z(cent / 100)} €/kWh = ${z(kosten, 2)} €`,
+      };
+    },
+  },
+  {
+    id: "leitung-max-laenge",
+    titel: "Maximale Leitungslänge bei Spannungsfall",
+    lf: "LF2",
+    bau(rng) {
+      const I = ausListe([16, 20, 25], rng);
+      const A = ausListe([2.5, 4, 6], rng);
+      const uMax = 0.03 * 230; // 3 % von 230 V
+      const l = (uMax * KAPPA_CU * A) / (2 * I);
+      return {
+        frage: `Wechselstromkreis 230 V, ${I} A, ${z(A, 1)} mm² Kupfer (κ = 56). Wie lang darf die Leitung höchstens sein, damit der Spannungsfall 3 % (6,9 V) nicht übersteigt?`,
+        loesung: l,
+        einheit: "m",
+        toleranz: 0.03,
+        weg: `l = (ΔU · κ · A) / (2 · I) = (${z(uMax, 1)} · 56 · ${z(A, 1)}) / (2 · ${I}) = ${z(l, 1)} m`,
+      };
+    },
+  },
 ];
 
 /** Baut eine konkrete Aufgabe aus einer zufällig gewählten Vorlage. */

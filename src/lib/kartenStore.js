@@ -16,11 +16,12 @@
 import { KARTEN as STAMM } from "../data/karten.js";
 import { RECHENKARTEN } from "../data/rechenkarten.js";
 import { BILD_KARTEN } from "../data/bildkarten.js";
+import { VISUELL_KARTEN } from "../data/visuellKarten.js";
 
 export const LS_KARTEN = "elektrolern_karten_v1";
 
 /** Alle fest eingebauten Karten (Original-Stand, nie verändert). */
-export const BASIS_KARTEN = [...STAMM, ...RECHENKARTEN, ...BILD_KARTEN];
+export const BASIS_KARTEN = [...STAMM, ...RECHENKARTEN, ...BILD_KARTEN, ...VISUELL_KARTEN];
 
 export function leererKartenStore() {
   return { eigene: [], korrekturen: {} };

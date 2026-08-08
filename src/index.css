@@ -411,6 +411,18 @@ details.ref .ref-body{padding:0 15px 13px;color:var(--text);font-size:.92rem;lin
   border-radius:12px;padding:12px 10px 8px}
 .dia svg{display:block;width:100%;height:auto}
 .dia-cap{font-size:.74rem;color:var(--muted);margin:7px 2px 0;line-height:1.4}
+/* Schaltzeichen als Bild-Frage: klein & zentriert statt volle Breite */
+.dia.sz-dia{display:flex;justify-content:center}
+.dia.sz-dia svg{width:auto;max-width:130px;max-height:150px}
+
+/* Schaltzeichen-Referenz-Grid */
+.sz-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:4px 0 2px}
+@media(min-width:440px){.sz-grid{grid-template-columns:repeat(3,1fr)}}
+.sz-cell{background:rgba(255,255,255,.03);border:1px solid var(--gb);border-radius:12px;
+  padding:10px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}
+.sz-sym svg{width:auto;height:66px;display:block}
+.sz-cell b{color:#7cb8ff;font-size:.82rem;font-weight:800}
+.sz-cell span{font-size:.72rem;color:var(--muted);line-height:1.4}
 .ip-demo{display:flex;gap:16px;align-items:flex-start;margin:8px 0 4px}
 .ip-demo .ip-p{font-size:2rem;font-weight:800;line-height:1}
 .ip-demo .ip-d{display:flex;flex-direction:column;gap:5px;flex:1;max-width:130px}
