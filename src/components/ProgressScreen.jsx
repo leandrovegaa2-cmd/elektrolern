@@ -14,7 +14,7 @@ import Icon from "./Icon.jsx";
 
 const BOX_NAMEN = ["Neu", "Box 1", "Box 2", "Box 3", "Box 4", "Box 5", "Box 6"];
 
-export default function ProgressScreen({ progress, sync, onProblemkarten, onLernfeldUeben, onEditor, onTabWechsel }) {
+export default function ProgressScreen({ progress, sync, onProblemkarten, onFehlerheft, onLernfeldUeben, onEditor, onTabWechsel }) {
   const fileInputRef = useRef(null);
   const karten = progress.karten;
   const gesamt = karten.length;
@@ -148,6 +148,16 @@ export default function ProgressScreen({ progress, sync, onProblemkarten, onLern
           </button>
         </>
       ) : null}
+
+      <div className="ref-h">Fehlerheft</div>
+      <div className="error-preview">
+        <span className="error-preview-icon" aria-hidden="true"><Icon name="clipboard" size={23} /></span>
+        <div>
+          <b>{progress.fehlerheftListe.filter((k) => !k.fehlerheft.geklaert).length} offene Lernchancen</b>
+          <p>Notizen ergänzen, Fehler klären und gezielt wiederholen.</p>
+        </div>
+        <button onClick={onFehlerheft}>Fehlerheft öffnen</button>
+      </div>
 
       <div className="ref-h">Erfolge</div>
       <ErfolgeGrid erfolge={progress.state.erfolge} />

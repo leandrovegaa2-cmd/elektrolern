@@ -24,12 +24,17 @@ export default function ResultScreen({ ergebnis, streakCount, onNochmal, onFalsc
     quote = Math.round((punkte / fragen.length) * 100);
     symbol = quote >= 80 ? "trophy" : quote >= 50 ? "effort" : "tools";
     titel = `${punkte} von ${fragen.length} richtig`;
-    text =
-      quote >= 80
-        ? "Stark. Das sitzt."
+    text = ergebnis.typ === "interaktiv"
+      ? quote >= 80
+        ? "Stark. Reihenfolgen und Zuordnungen sitzen."
         : quote >= 50
-        ? "Solide Basis — die Lücken holen wir mit den Karteikarten."
-        : "Kein Stress: Genau dafür ist die App da. Karteikarten-Modus hilft.";
+        ? "Gute Basis. Eine weitere Runde festigt die Abläufe."
+        : "Die Lösungen sind jetzt sichtbar gewesen — in der nächsten Runde wird es leichter."
+      : quote >= 80
+      ? "Stark. Das sitzt."
+      : quote >= 50
+      ? "Solide Basis — die Lücken holen wir mit den Karteikarten."
+      : "Kein Stress: Genau dafür ist die App da. Karteikarten-Modus hilft.";
   }
 
   useEffect(() => {

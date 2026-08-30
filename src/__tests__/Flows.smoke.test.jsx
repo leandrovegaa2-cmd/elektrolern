@@ -198,4 +198,60 @@ describe('Nachschlagen-Panels', () => {
     fireEvent.change(input, { target: { value: 'Ohmsche' } });
     expect(screen.getByText(/Karten-Treffer/)).toBeInTheDocument();
   });
+
+  it('zeigt offizielle Fachquellen mit externen Links', () => {
+    render(<App />);
+    fireEvent.click(screen.getByText('Nachschlagen'));
+    fireEvent.click(screen.getByRole('tab', { name: /Quellen/ }));
+    expect(screen.getByText('DGUV Information 203-001')).toBeInTheDocument();
+    expect(screen.getByText('DIN VDE 0100-410:2018-10')).toBeInTheDocument();
+    const links = screen.getAllByText(/Offizielle Quelle öffnen/);
+    expect(links.length).toBeGreaterThanOrEqual(5);
+    expect(links[0].closest('a')).toHaveAttribute('target', '_blank');
+  });
+});
+
+describe('Fehlerheft', () => {
+  it('erfasst eine falsche Antwort, speichert eine Notiz und markiert sie als geklaert', () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: /Tagespaket starten/ }));
+    const frage = document.querySelector('.flashcard .q').textContent;
+    fireEvent.click(screen.getByText('Antwort zeigen'));
+    fireEvent.click(screen.getByRole('button', { name: /Nicht gewusst/ }));
+    fireEvent.click(screen.getByText(/Abbrechen/));
+    fireEvent.click(screen.getByRole('button', { name: /Fehlerheft/ }));
+
+    expect(screen.getByText(frage)).toBeInTheDocument();
+    const notiz = screen.getByPlaceholderText(/Warum war die Antwort falsch/);
+    fireEvent.change(notiz, { target: { value: 'Beim nächsten Mal zuerst die Schutzmaßnahme prüfen.' } });
+    expect(notiz).toHaveValue('Beim nächsten Mal zuerst die Schutzmaßnahme prüfen.');
+    fireEvent.click(screen.getByRole('button', { name: /Als geklärt markieren/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Geklärt' }));
+    expect(screen.getByText(frage)).toBeInTheDocument();
+  });
+});
+
+describe('Interaktive Aufgaben', () => {
+  it('loest Reihenfolge und Zuordnung mit direktem Feedback', () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: /Interaktiv/ }));
+    expect(screen.getByText('Reihenfolge')).toBeInTheDocument();
+
+    for (let i = 0; i < 4; i++) fireEvent.click(screen.getByLabelText(/Freischalten nach oben/));
+    fireEvent.click(screen.getByText('Lösung prüfen'));
+    expect(screen.getByText('Richtig gelöst.')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Nächste Aufgabe'));
+
+    for (let i = 0; i < 2; i++) fireEvent.click(screen.getByLabelText(/Besichtigen nach oben/));
+    fireEvent.click(screen.getByText('Lösung prüfen'));
+    fireEvent.click(screen.getByText('Nächste Aufgabe'));
+
+    expect(screen.getByText('Zuordnung')).toBeInTheDocument();
+    const selects = document.querySelectorAll('.match-list select');
+    fireEvent.change(selects[0], { target: { value: 'Grün-Gelb' } });
+    fireEvent.change(selects[1], { target: { value: 'Blau' } });
+    fireEvent.change(selects[2], { target: { value: 'L1, L2 oder L3' } });
+    fireEvent.click(screen.getByText('Lösung prüfen'));
+    expect(screen.getByText('Richtig gelöst.')).toBeInTheDocument();
+  });
 });

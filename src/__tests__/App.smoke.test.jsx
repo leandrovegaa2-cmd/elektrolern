@@ -61,8 +61,8 @@ describe('App smoke test', () => {
     // Karte ist sichtbar (Frage-Text vorhanden)
     expect(screen.getByText('Tippen oder Leertaste zum Aufdecken')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Antwort zeigen'));
-    expect(screen.getByText('✓ Gewusst')).toBeInTheDocument();
-    fireEvent.click(screen.getByText('✓ Gewusst'));
+    expect(screen.getByRole('button', { name: 'Gewusst' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Gewusst' }));
     // Nach der Antwort läuft die Session weiter (Zähler oder Ergebnis sichtbar)
     expect(document.getElementById('app')).toBeTruthy();
   });

@@ -22,6 +22,7 @@ function leererStand() {
     verlauf: [],
     erfolge: {},
     pruefDatum: null,
+    fehlerheft: {},
   };
 }
 
@@ -128,6 +129,23 @@ export function useProgress() {
         ...naechsteBox(bisher, gewusst),
         fehler: fehlerVon(bisher) + (gewusst ? 0 : 1),
       };
+      const bisherigerEintrag = prev.fehlerheft?.[karte.i];
+      if (!gewusst || bisherigerEintrag) {
+        next.fehlerheft = { ...(prev.fehlerheft || {}) };
+        next.fehlerheft[karte.i] = gewusst
+          ? {
+              ...bisherigerEintrag,
+              richtigSeitFehler: (bisherigerEintrag.richtigSeitFehler || 0) + 1,
+            }
+          : {
+              ...bisherigerEintrag,
+              anzahl: (bisherigerEintrag?.anzahl || 0) + 1,
+              zuletzt: todayISO(),
+              notiz: bisherigerEintrag?.notiz || "",
+              geklaert: false,
+              richtigSeitFehler: 0,
+            };
+      }
       next.xp = (prev.xp || 0) + xpFuerAntwort(gewusst);
       next.heute = heuteZaehlen(prev.heute);
       next.verlauf = verlaufAktualisieren(prev.verlauf, { prozent: gesamtProzent(alle, next.prog), xp: next.xp });
@@ -197,6 +215,38 @@ export function useProgress() {
     });
   }, []);
 
+  const fehlerNotizSetzen = useCallback((kartenId, notiz) => {
+    setState((prev) => {
+      const eintrag = prev.fehlerheft?.[kartenId];
+      if (!eintrag) return prev;
+      const next = {
+        ...prev,
+        fehlerheft: {
+          ...prev.fehlerheft,
+          [kartenId]: { ...eintrag, notiz: String(notiz).slice(0, 500) },
+        },
+      };
+      speichereState(next);
+      return next;
+    });
+  }, []);
+
+  const fehlerGeklaertSetzen = useCallback((kartenId, geklaert) => {
+    setState((prev) => {
+      const eintrag = prev.fehlerheft?.[kartenId];
+      if (!eintrag) return prev;
+      const next = {
+        ...prev,
+        fehlerheft: {
+          ...prev.fehlerheft,
+          [kartenId]: { ...eintrag, geklaert: !!geklaert },
+        },
+      };
+      speichereState(next);
+      return next;
+    });
+  }, []);
+
   const resetAll = useCallback(() => {
     persist(leererStand());
   }, [persist]);
@@ -212,6 +262,7 @@ export function useProgress() {
         verlauf: Array.isArray(importiert.verlauf) ? importiert.verlauf : [],
         erfolge: importiert.erfolge && typeof importiert.erfolge === "object" ? importiert.erfolge : {},
         pruefDatum: pruefDatumGueltig(importiert.pruefDatum) ? importiert.pruefDatum : null,
+        fehlerheft: importiert.fehlerheft && typeof importiert.fehlerheft === "object" ? importiert.fehlerheft : {},
       });
     },
     [persist]
@@ -222,6 +273,16 @@ export function useProgress() {
   const xpBisNaechstesLevel = useMemo(() => schwelleFuerLevel(level + 1) - (state.xp || 0), [level, state.xp]);
   const heuteAnzahl = useMemo(() => heutigerStand(state.heute), [state.heute]);
   const problemkartenListe = useMemo(() => problemkarten(karten, state.prog), [karten, state.prog]);
+  const fehlerheftListe = useMemo(() => {
+    const map = state.fehlerheft || {};
+    return karten
+      .filter((karte) => map[karte.i])
+      .map((karte) => ({ ...karte, fehlerheft: map[karte.i] }))
+      .sort((a, b) => {
+        if (!!a.fehlerheft.geklaert !== !!b.fehlerheft.geklaert) return a.fehlerheft.geklaert ? 1 : -1;
+        return (b.fehlerheft.zuletzt || "").localeCompare(a.fehlerheft.zuletzt || "") || b.fehlerheft.anzahl - a.fehlerheft.anzahl;
+      });
+  }, [karten, state.fehlerheft]);
   const plan = useMemo(() => lernplan(karten, state.prog, state.pruefDatum), [karten, state.prog, state.pruefDatum]);
 
   return {
@@ -241,6 +302,8 @@ export function useProgress() {
     pruefungAbschliessen,
     setTagesziel,
     setPruefDatum,
+    fehlerNotizSetzen,
+    fehlerGeklaertSetzen,
     resetAll,
     importState,
     level,
@@ -248,6 +311,7 @@ export function useProgress() {
     xpBisNaechstesLevel,
     heuteAnzahl,
     problemkartenListe,
+    fehlerheftListe,
     plan,
   };
 }

@@ -167,10 +167,10 @@ export default function FlashcardSession({
         ) : (
           <div className="answer-row">
             <button className="btn-bad" onClick={() => beantwortet(false)}>
-              ✗ Nicht gewusst
+              <Icon name="close" size={17} /> Nicht gewusst
             </button>
             <button className="btn-ok" onClick={() => beantwortet(true)}>
-              ✓ Gewusst
+              <Icon name="check" size={17} /> Gewusst
             </button>
           </div>
         )}

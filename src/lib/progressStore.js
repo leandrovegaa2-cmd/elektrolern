@@ -18,6 +18,7 @@ function leererState() {
     verlauf: [],
     erfolge: {},
     pruefDatum: null,
+    fehlerheft: {},
   };
 }
 
@@ -44,6 +45,7 @@ export function ladeState() {
   s.verlauf = Array.isArray(s.verlauf) ? s.verlauf : [];
   s.erfolge = s.erfolge && typeof s.erfolge === "object" ? s.erfolge : {};
   s.pruefDatum = pruefDatumGueltig(s.pruefDatum) ? s.pruefDatum : null;
+  s.fehlerheft = s.fehlerheft && typeof s.fehlerheft === "object" ? s.fehlerheft : {};
   return s;
 }
 

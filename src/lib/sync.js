@@ -19,6 +19,7 @@ function leer() {
     verlauf: [],
     erfolge: {},
     pruefDatum: null,
+    fehlerheft: {},
   };
 }
 
@@ -81,6 +82,27 @@ export function mergeErfolge(a = {}, b = {}) {
   return out;
 }
 
+/** Fehlerheft: Notizen folgen dem jüngeren Stand, Fehlerzahlen gehen nie verloren. */
+export function mergeFehlerheft(a = {}, b = {}, remoteNeuer = false) {
+  const out = {};
+  for (const id of new Set([...Object.keys(a || {}), ...Object.keys(b || {})])) {
+    const ea = a?.[id];
+    const eb = b?.[id];
+    if (!ea) { out[id] = eb; continue; }
+    if (!eb) { out[id] = ea; continue; }
+    const neuer = remoteNeuer ? eb : ea;
+    const aelter = remoteNeuer ? ea : eb;
+    out[id] = {
+      ...aelter,
+      ...neuer,
+      anzahl: Math.max(ea.anzahl || 0, eb.anzahl || 0),
+      zuletzt: (ea.zuletzt || "") >= (eb.zuletzt || "") ? ea.zuletzt : eb.zuletzt,
+      richtigSeitFehler: Math.max(ea.richtigSeitFehler || 0, eb.richtigSeitFehler || 0),
+    };
+  }
+  return out;
+}
+
 /** Tageszähler: der spätere Kalendertag; bei gleichem Tag die höhere Anzahl. */
 function mergeHeute(a, b) {
   const ha = a && typeof a === "object" ? a : { datum: null, anzahl: 0 };
@@ -115,5 +137,6 @@ export function mergeState(lokal, remote, remoteNeuer = false) {
     verlauf: mergeVerlauf(a.verlauf, b.verlauf),
     erfolge: mergeErfolge(a.erfolge, b.erfolge),
     pruefDatum,
+    fehlerheft: mergeFehlerheft(a.fehlerheft, b.fehlerheft, remoteNeuer),
   };
 }

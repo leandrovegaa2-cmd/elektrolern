@@ -18,6 +18,8 @@ import KeyHelp from "./components/KeyHelp.jsx";
 import { useHotkeys } from "./hooks/useHotkeys.js";
 import { PRUEF_ANZAHL, PRUEF_RECHNEN } from "./lib/exam.js";
 import Icon from "./components/Icon.jsx";
+import ErrorNotebook from "./components/ErrorNotebook.jsx";
+import InteractiveSession from "./components/InteractiveSession.jsx";
 
 export default function App() {
   const progress = useProgress();
@@ -57,7 +59,11 @@ export default function App() {
         return setScreen(rechenQuelle === "generator" ? "home" : "modus");
       case "pruefung":
         return gehHeim();
+      case "interaktiv":
+        return gehHeim();
       case "editor":
+        return setScreen("stats");
+      case "fehlerheft":
         return setScreen("stats");
       case "ref":
       case "stats":
@@ -189,9 +195,14 @@ export default function App() {
     setScreen("rechnen");
   }
 
+  function onInteraktiv() {
+    setSessionKey((k) => k + 1);
+    setScreen("interaktiv");
+  }
+
   // Globale Tastenkürzel. Buchstaben (nicht Ziffern), damit im Quiz die 1–4
   // frei bleiben. Während Session nur „?" + Esc, sonst auch die Navigation.
-  const istSession = ["flash", "quiz", "rechnen", "pruefung"].includes(screen);
+  const istSession = ["flash", "quiz", "rechnen", "pruefung", "interaktiv"].includes(screen);
   const hotkeys = {
     "?": () => setHilfeOffen((v) => !v),
     Escape: aufEsc,
@@ -216,6 +227,8 @@ export default function App() {
     flash: "Karteikarten",
     quiz: "Quiz",
     rechnen: "Rechnen",
+    interaktiv: "Interaktiv üben",
+    fehlerheft: "Fehlerheft",
     editor: "Karten bearbeiten",
     pruefung: "Prüfungssimulation",
     pruefungErgebnis: "Prüfungsergebnis",
@@ -237,6 +250,8 @@ export default function App() {
           onPruefung={onPruefung}
           onProblemkarten={onProblemkarten}
           onRechentrainer={onRechentrainer}
+          onInteraktiv={onInteraktiv}
+          onFehlerheft={() => setScreen("fehlerheft")}
           onReset={onReset}
           onTabWechsel={onTabWechsel}
         />
@@ -310,6 +325,22 @@ export default function App() {
         />
       )}
 
+      {screen === "interaktiv" && (
+        <InteractiveSession
+          key={"interaktiv-" + sessionKey}
+          progress={progress}
+          onAbbrechen={gehHeim}
+          onErgebnis={(erg) => {
+            setErgebnis(erg);
+            setScreen("ergebnis");
+          }}
+        />
+      )}
+
+      {screen === "fehlerheft" && (
+        <ErrorNotebook progress={progress} onUeben={uebeKarten} onTabWechsel={onTabWechsel} />
+      )}
+
       {screen === "editor" && <CardEditor onZurueck={() => setScreen("stats")} onTabWechsel={onTabWechsel} />}
 
       {screen === "pruefung" && (
@@ -336,6 +367,7 @@ export default function App() {
           streakCount={progress.state.streak.count}
           onNochmal={() => {
             if (ergebnis.typ === "flash") starteFlash(true);
+            else if (ergebnis.typ === "interaktiv") onInteraktiv();
             else if (ergebnis.typ !== "rechnen") starteQuiz();
             else if (ergebnis.quelle === "generator") onRechentrainer();
             else starteRechnen();
@@ -352,6 +384,7 @@ export default function App() {
           progress={progress}
           sync={sync}
           onProblemkarten={onProblemkarten}
+          onFehlerheft={() => setScreen("fehlerheft")}
           onLernfeldUeben={onLernfeldUeben}
           onEditor={() => setScreen("editor")}
           onTabWechsel={onTabWechsel}

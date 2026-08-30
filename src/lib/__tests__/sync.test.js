@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mergeState, mergeProg, mergeStreak, mergeVerlauf, mergeErfolge } from '../sync.js';
+import { mergeState, mergeProg, mergeStreak, mergeVerlauf, mergeErfolge, mergeFehlerheft } from '../sync.js';
 import { STANDARD_TAGESZIEL } from '../tagesziel.js';
 
 describe('mergeProg', () => {
@@ -53,6 +53,19 @@ describe('mergeErfolge', () => {
     const r = mergeErfolge({ streak7: '2026-08-05' }, { streak7: '2026-08-01', level5: '2026-08-03' });
     expect(r.streak7).toBe('2026-08-01');
     expect(r.level5).toBe('2026-08-03');
+  });
+});
+
+describe('mergeFehlerheft', () => {
+  it('behaelt die hoechste Fehlerzahl und nimmt Notiz/Status vom neueren Stand', () => {
+    const lokal = { k1: { anzahl: 3, notiz: 'lokal', geklaert: false, zuletzt: '2026-08-20' } };
+    const remote = { k1: { anzahl: 2, notiz: 'remote', geklaert: true, zuletzt: '2026-08-21' } };
+    expect(mergeFehlerheft(lokal, remote, true).k1).toMatchObject({
+      anzahl: 3,
+      notiz: 'remote',
+      geklaert: true,
+      zuletzt: '2026-08-21',
+    });
   });
 });
 

@@ -6,6 +6,7 @@ import WissenPanel from "./reference/WissenPanel.jsx";
 import CardsPanel from "./reference/CardsPanel.jsx";
 import RechnerPanel from "./reference/rechner/RechnerPanel.jsx";
 import SearchResults from "./reference/SearchResults.jsx";
+import SourcesPanel from "./reference/SourcesPanel.jsx";
 import Icon from "./Icon.jsx";
 
 const SEGMENTE = [
@@ -13,6 +14,7 @@ const SEGMENTE = [
   { id: "rechner", label: "Rechner", icon: "calculator" },
   { id: "wissen", label: "Wissen", icon: "book" },
   { id: "karten", label: "Karten", icon: "layers" },
+  { id: "quellen", label: "Quellen", icon: "safety" },
 ];
 
 export default function ReferenceScreen({ progress, onTabWechsel }) {
@@ -64,6 +66,8 @@ export default function ReferenceScreen({ progress, onTabWechsel }) {
         <RechnerPanel />
       ) : seg === "wissen" ? (
         <WissenPanel />
+      ) : seg === "quellen" ? (
+        <SourcesPanel />
       ) : (
         <CardsPanel />
       )}

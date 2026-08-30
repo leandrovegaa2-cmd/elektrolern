@@ -17,6 +17,8 @@ export default function HomeScreen({
   onPruefung,
   onProblemkarten,
   onRechentrainer,
+  onInteraktiv,
+  onFehlerheft,
   onReset,
   onTabWechsel,
 }) {
@@ -74,6 +76,16 @@ export default function HomeScreen({
           <span className="q-ico" aria-hidden="true"><Icon name="calculator" /></span>
           <span className="q-titel">Rechnen</span>
           <span className="q-sub">Aufgaben mit Zahlen</span>
+        </button>
+        <button className="quick" onClick={onInteraktiv}>
+          <span className="q-ico" aria-hidden="true"><Icon name="circuit" /></span>
+          <span className="q-titel">Interaktiv</span>
+          <span className="q-sub">Sortieren &amp; zuordnen</span>
+        </button>
+        <button className={"quick" + (progress.fehlerheftListe.some((k) => !k.fehlerheft.geklaert) ? " warn" : "")} onClick={onFehlerheft}>
+          <span className="q-ico" aria-hidden="true"><Icon name="clipboard" /></span>
+          <span className="q-titel">Fehlerheft</span>
+          <span className="q-sub">{progress.fehlerheftListe.filter((k) => !k.fehlerheft.geklaert).length} offene Einträge</span>
         </button>
         {anzahlProblemkarten > 0 ? (
           <button className="quick warn" onClick={onProblemkarten}>
