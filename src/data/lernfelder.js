@@ -12,25 +12,25 @@
 //   LJ1 = LF1–4 · LJ2 = LF5–8 · LJ3 = LF9–11 · LJ4 = LF12–13
 
 export const LF_META = {
-  LF1: { icon: "⚡", farbe: "#3b82f6" }, // Systeme analysieren & prüfen
-  LF2: { icon: "🔌", farbe: "#22d3ee" }, // Installation planen & ausführen
-  LF3: { icon: "🎛️", farbe: "#a78bfa" }, // Steuerungen analysieren
-  LF4: { icon: "💻", farbe: "#38bdf8" }, // Informationstechnik
-  LF5: { icon: "🏭", farbe: "#f59e0b" }, // Energieversorgung & Sicherheit
-  LF6: { icon: "🔍", farbe: "#34d399" }, // Anlagen prüfen
-  LF7: { icon: "🤖", farbe: "#6366f1" }, // SPS programmieren
-  LF8: { icon: "⚙️", farbe: "#fb923c" }, // Antriebe & Motoren
-  LF9: { icon: "🏠", farbe: "#2dd4bf" }, // Kommunikation / KNX
+  LF1: { icon: "bolt", farbe: "#3b82f6" }, // Systeme analysieren & prüfen
+  LF2: { icon: "circuit", farbe: "#22d3ee" }, // Installation planen & ausführen
+  LF3: { icon: "control", farbe: "#a78bfa" }, // Steuerungen analysieren
+  LF4: { icon: "terminal", farbe: "#38bdf8" }, // Informationstechnik
+  LF5: { icon: "factory", farbe: "#f59e0b" }, // Energieversorgung & Sicherheit
+  LF6: { icon: "search", farbe: "#34d399" }, // Anlagen prüfen
+  LF7: { icon: "plc", farbe: "#6366f1" }, // SPS programmieren
+  LF8: { icon: "motor", farbe: "#fb923c" }, // Antriebe & Motoren
+  LF9: { icon: "house", farbe: "#2dd4bf" }, // Kommunikation / KNX
   // Rot ist hier bewusst NICHT vergeben: es liest sich in dieser App als Fehler
   // bzw. Warnung (falsche Antwort, Problemkarten) und wäre als Lernfeld-Farbe
   // ein falsches Signal.
-  LF10: { icon: "🚿", farbe: "#c084fc" }, // Haustechnik & Installation
-  LF11: { icon: "☀️", farbe: "#fbbf24" }, // Energietechnik (PV, Blitz)
-  LF12: { icon: "📐", farbe: "#60a5fa" }, // Anlagen planen
-  LF13: { icon: "🔧", farbe: "#f472b6" }, // Instandhaltung & Fehlersuche
+  LF10: { icon: "water", farbe: "#c084fc" }, // Haustechnik & Installation
+  LF11: { icon: "solar", farbe: "#fbbf24" }, // Energietechnik (PV, Blitz)
+  LF12: { icon: "plan", farbe: "#60a5fa" }, // Anlagen planen
+  LF13: { icon: "tools", farbe: "#f472b6" }, // Instandhaltung & Fehlersuche
 };
 
-const LF_FALLBACK = { icon: "📘", farbe: "#8f98ac" };
+const LF_FALLBACK = { icon: "book", farbe: "#8f98ac" };
 
 /** Symbol + Farbe eines Lernfelds. Unbekannte Lernfelder bekommen ein neutrales Paar. */
 export function lfMeta(lf) {
@@ -43,7 +43,7 @@ export function lfMeta(lf) {
  * Ebene „Lernfeld" darunter, obwohl beide dieselbe Kartenform benutzen.
  */
 export const LJ_META = {
-  0: { badge: "★", farbe: "#22d3ee" },
+  0: { badge: "layers", farbe: "#22d3ee" },
   1: { badge: "1", farbe: "#3b82f6" },
   2: { badge: "2", farbe: "#a78bfa" },
   3: { badge: "3", farbe: "#34d399" },

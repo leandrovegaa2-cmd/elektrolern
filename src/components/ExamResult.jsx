@@ -4,6 +4,7 @@ import { bestanden as istBestanden, lfAnalyse, istFrageKorrekt } from "../lib/ex
 import { konfetti } from "../lib/konfetti.js";
 import { formatZahl } from "../lib/rechnen.js";
 import { LF_NAMEN } from "../data/namen.js";
+import Icon from "./Icon.jsx";
 
 /** Was hat der Nutzer geantwortet — je nach Fragetyp Option oder Zahl. */
 function deineAntwort(f) {
@@ -29,7 +30,7 @@ export default function ExamResult({ ergebnis, onNeuePruefung, onHeim }) {
   const bestanden = istBestanden(punkte, gesamt);
   const min = Math.floor(zeitMs / 60000);
   const sek = Math.floor((zeitMs % 60000) / 1000);
-  const emoji = quote >= 80 ? "🏆" : bestanden ? "💪" : "📚";
+  const symbol = quote >= 80 ? "trophy" : bestanden ? "effort" : "book";
   const [zeigeFalsch, setZeigeFalsch] = useState(false);
 
   const analyse = lfAnalyse(antworten.map((f) => ({ lf: f.k.lf, korrekt: istFrageKorrekt(f) })));
@@ -45,7 +46,7 @@ export default function ExamResult({ ergebnis, onNeuePruefung, onHeim }) {
   return (
     <div className="result result-shell exam-result-shell">
       <span className="result-code">PRÜFUNG / AUSWERTUNG</span>
-      <div className="big">{emoji}</div>
+      <div className="big result-symbol"><Icon name={symbol} size={42} /></div>
       <Ring prozent={quote} />
       <div className={"verdikt " + (bestanden ? "ok" : "no")}>{bestanden ? "Bestanden ✓" : "Noch nicht bestanden"}</div>
       <h1>
@@ -88,11 +89,11 @@ export default function ExamResult({ ergebnis, onNeuePruefung, onHeim }) {
           {falsche.map((f, i) => (
             <div className="falsch-frage" key={i}>
               <div className="ff-q">
-                {f.typ === "rechnen" ? <span className="ff-typ">🔢 Rechnen</span> : null}
+                {f.typ === "rechnen" ? <span className="ff-typ"><Icon name="calculator" size={12} /> Rechnen</span> : null}
                 {f.k.f}
               </div>
-              <div className="ff-du">✗ Deine Antwort: {deineAntwort(f)}</div>
-              <div className="ff-r">✓ Richtig: {richtigeAntwort(f)}</div>
+              <div className="ff-du"><Icon name="close" size={13} /> Deine Antwort: {deineAntwort(f)}</div>
+              <div className="ff-r"><Icon name="check" size={13} /> Richtig: {richtigeAntwort(f)}</div>
             </div>
           ))}
         </div>

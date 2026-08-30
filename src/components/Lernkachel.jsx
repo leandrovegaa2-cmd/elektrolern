@@ -1,4 +1,5 @@
 import MiniRing from "./MiniRing.jsx";
+import Icon from "./Icon.jsx";
 
 /**
  * Auswahl-Karte für „Gezielt lernen" — einmal für Lehrjahre, einmal für Lernfelder.
@@ -11,14 +12,15 @@ import MiniRing from "./MiniRing.jsx";
  * Die Farbe kommt als CSS-Variable rein, damit Badge, Ring und Balken garantiert
  * denselben Ton tragen, ohne dass die Farbe dreimal durch die Props wandert.
  */
-export default function Lernkachel({ farbe, badge, kicker, titel, anzahl, faellig, prozent, onClick }) {
-  const label = `${kicker ? kicker + ", " : ""}${titel}: ${anzahl} Karten, ${faellig} fällig, ${prozent} Prozent gelernt`;
+export default function Lernkachel({ farbe, badge, kicker, titel, anzahl, faellig, neu = 0, prozent, onClick }) {
+  const status = faellig > 0 ? `${faellig} Wiederholungen fällig` : neu > 0 ? `${neu} neue Karten` : "alles aufgeholt";
+  const label = `${kicker ? kicker + ", " : ""}${titel}: ${anzahl} Karten, ${status}, ${prozent} Prozent gelernt`;
 
   return (
     <button className="lk" style={{ "--lk": farbe }} onClick={onClick} aria-label={label}>
       <span className="lk-kopf">
         <span className={"lk-badge" + (String(badge).length > 1 ? " lang" : "")} aria-hidden="true">
-          {badge}
+          {/^\d+$/.test(String(badge)) ? badge : <Icon name={badge} size={19} />}
         </span>
         <span className="lk-text">
           {kicker ? <span className="lk-kicker">{kicker}</span> : null}
@@ -33,8 +35,10 @@ export default function Lernkachel({ farbe, badge, kicker, titel, anzahl, faelli
           <span className="lk-faellig">
             <i aria-hidden="true" /> {faellig} fällig
           </span>
+        ) : neu > 0 ? (
+          <span className="lk-neu">{neu} neu</span>
         ) : (
-          <span className="lk-fertig">✓ aufgeholt</span>
+          <span className="lk-fertig"><Icon name="check" size={13} /> aufgeholt</span>
         )}
       </span>
 

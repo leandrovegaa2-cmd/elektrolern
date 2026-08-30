@@ -6,12 +6,13 @@ import WissenPanel from "./reference/WissenPanel.jsx";
 import CardsPanel from "./reference/CardsPanel.jsx";
 import RechnerPanel from "./reference/rechner/RechnerPanel.jsx";
 import SearchResults from "./reference/SearchResults.jsx";
+import Icon from "./Icon.jsx";
 
 const SEGMENTE = [
-  { id: "formeln", label: "📐 Formeln" },
-  { id: "rechner", label: "🧮 Rechner" },
-  { id: "wissen", label: "📖 Wissen" },
-  { id: "karten", label: "🃏 Karten" },
+  { id: "formeln", label: "Formeln", icon: "formula" },
+  { id: "rechner", label: "Rechner", icon: "calculator" },
+  { id: "wissen", label: "Wissen", icon: "book" },
+  { id: "karten", label: "Karten", icon: "layers" },
 ];
 
 export default function ReferenceScreen({ progress, onTabWechsel }) {
@@ -50,7 +51,7 @@ export default function ReferenceScreen({ progress, onTabWechsel }) {
               setQuery("");
             }}
           >
-            {s.label}
+            <Icon name={s.icon} size={16} /> {s.label}
           </button>
         ))}
       </div>

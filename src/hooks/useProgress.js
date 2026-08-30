@@ -77,9 +77,27 @@ export function useProgress() {
     [karten]
   );
 
+  /** Echte Wiederholungen: Die Karte wurde schon beantwortet und ist wieder fällig. */
   const faelligVon = useCallback(
-    (lj, lf) => kartenVon(lj, lf).filter((k) => istFaellig(state.prog[k.i])),
+    (lj, lf) => kartenVon(lj, lf).filter((k) => state.prog[k.i] && istFaellig(state.prog[k.i])),
     [kartenVon, state.prog]
+  );
+
+  /** Neue Karten werden getrennt ausgewiesen und nie als Rückstand bezeichnet. */
+  const neuVon = useCallback(
+    (lj, lf) => kartenVon(lj, lf).filter((k) => !state.prog[k.i]),
+    [kartenVon, state.prog]
+  );
+
+  /** Tagespaket: zuerst fällige Wiederholungen, danach neue Karten bis zum Limit. */
+  const tagespaketVon = useCallback(
+    (lj, lf, limit = STANDARD_TAGESZIEL) => {
+      const max = Math.max(1, Number(limit) || STANDARD_TAGESZIEL);
+      const wiederholungen = faelligVon(lj, lf);
+      const freiePlaetze = Math.max(0, max - wiederholungen.length);
+      return [...wiederholungen.slice(0, max), ...neuVon(lj, lf).slice(0, freiePlaetze)];
+    },
+    [faelligVon, neuVon]
   );
 
   const fortschrittProzent = useCallback(
@@ -211,6 +229,8 @@ export function useProgress() {
     karten,
     kartenVon,
     faelligVon,
+    neuVon,
+    tagespaketVon,
     fortschrittProzent,
     boxVon: (kartenId) => boxVon(state.prog[kartenId]),
     istGelernt: (kartenId) => istGelernt(state.prog[kartenId]),

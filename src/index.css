@@ -976,3 +976,25 @@ header{padding:10px 2px 18px}
 .result-shell h1{letter-spacing:-.045em}.result-shell .next-btn{margin-top:9px}
 .result-shell .verdikt{border-radius:8px;letter-spacing:.04em;text-transform:uppercase;font-size:.7rem}
 @media(max-width:390px){.result-shell{padding:26px 16px 22px;border-radius:23px}}
+
+/* ---------- Eigenes ElektroLern-Symbolsystem ---------- */
+.ui-icon{display:block;flex-shrink:0;overflow:visible}
+.next-btn span,.mode-btn span,.backup-row button,.seg-btn,.h-label,.h-pille,.lf-badge,
+.ff-typ,.ff-du,.ff-r{display:flex;align-items:center;gap:7px}
+.q-ico{color:#b5f23d;filter:drop-shadow(0 0 9px rgba(181,242,61,.25))!important}
+.h-label{color:#aeb6a8}.h-label .ui-icon{color:#b5f23d}
+.h-pille .ui-icon{color:#9ed338}.lk-badge .ui-icon{color:var(--lk)}
+.lk-neu{flex-shrink:0;font-size:.72rem;font-weight:700;color:#9dcf3d;
+  background:rgba(181,242,61,.08);border:1px solid rgba(181,242,61,.2);border-radius:7px;padding:3px 8px}
+.lk-fertig{display:flex;align-items:center;gap:4px}.lk-fertig .ui-icon{color:var(--ok)}
+.lz-badge .ui-icon{color:var(--lk)}.eb-icon{color:#b5f23d}.eb-icon .ui-icon{filter:drop-shadow(0 0 8px rgba(181,242,61,.2))}
+.erfolg-badge.locked .eb-icon{color:#687064}.ref-icon{display:inline-grid;place-items:center;width:28px;height:28px;
+  margin-right:7px;vertical-align:middle;border-radius:8px;background:rgba(181,242,61,.07);color:#b5f23d;
+  border:1px solid rgba(181,242,61,.12)}
+.ref summary{display:flex;align-items:center}.ref summary .ref-sub{margin-left:auto}
+.result-symbol{width:68px!important;height:68px;display:grid!important;place-items:center;margin:0 auto 8px!important;
+  border-radius:20px;background:rgba(181,242,61,.1);color:#b5f23d;border:1px solid rgba(181,242,61,.2)}
+.flame{color:#b5f23d}.tap-hint .ui-icon{color:#b5f23d;animation:signalPulse 1.8s ease-in-out infinite}
+.editor-fahne .ef-ico,.konto-ico{color:#b5f23d}.seg-btn .ui-icon{opacity:.72}.seg-btn.active .ui-icon{opacity:1}
+.dialog-titel{display:flex;align-items:center;gap:9px}.keyhelp-hint .ui-icon{margin:auto}
+@media(prefers-reduced-motion:reduce){.tap-hint .ui-icon{animation:none!important}}

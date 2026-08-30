@@ -1,5 +1,6 @@
 import { LJ_NAMEN } from "../data/namen.js";
 import TabBar from "./TabBar.jsx";
+import Icon from "./Icon.jsx";
 
 export default function ModePicker({
   progress,
@@ -14,6 +15,7 @@ export default function ModePicker({
   const karten = progress.kartenVon(gewaehltesLJ, gewaehltesLF);
   const anz = karten.length;
   const fael = progress.faelligVon(gewaehltesLJ, gewaehltesLF).length;
+  const neu = progress.neuVon(gewaehltesLJ, gewaehltesLF).length;
   const rechenKarten = karten.filter((k) => k.r).length;
   const auswahl = LJ_NAMEN[gewaehltesLJ] + (gewaehltesLF ? " · " + gewaehltesLF : "");
 
@@ -27,19 +29,19 @@ export default function ModePicker({
       <section className="screen-intro mode-intro">
         <span className="screen-code">TRAINING / MODUS</span>
         <h1>{auswahl}</h1>
-        <p>{anz} Karten · {fael} heute fällig</p>
+        <p>{anz} Karten · {fael} Wiederholungen · {neu} neu</p>
       </section>
       <div className="mode-row mode-command">
         <button className="mode-btn" onClick={onFlash}>
           <span className="mode-index">01</span>
-          <span className="mode-emoji" aria-hidden="true">▱</span>
+          <span className="mode-emoji" aria-hidden="true"><Icon name="layers" /></span>
           <span className="mode-name">Karteikarten</span>
           <small>Einprägen und mit dem Leitner-System wiederholen</small>
           <i aria-hidden="true">→</i>
         </button>
         <button className="mode-btn secondary" onClick={onQuiz}>
           <span className="mode-index">02</span>
-          <span className="mode-emoji" aria-hidden="true">⌖</span>
+          <span className="mode-emoji" aria-hidden="true"><Icon name="target" /></span>
           <span className="mode-name">Quiz</span>
           <small>Wissen abrufen und Antworten direkt prüfen</small>
           <i aria-hidden="true">→</i>
@@ -47,7 +49,7 @@ export default function ModePicker({
       </div>
       {rechenKarten > 0 ? (
         <button className="next-btn secondary calculate-btn" onClick={onRechnen}>
-          <span>🔢 Rechnen ({rechenKarten} Aufgaben)</span><i aria-hidden="true">→</i>
+          <span><Icon name="calculator" size={18} /> Rechnen ({rechenKarten} Aufgaben)</span><i aria-hidden="true">→</i>
         </button>
       ) : null}
       <TabBar aktiv="lernen" onWechsel={onTabWechsel} />

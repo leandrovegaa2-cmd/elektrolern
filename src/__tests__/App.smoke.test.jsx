@@ -57,13 +57,21 @@ describe('App smoke test', () => {
 
   it('kompletter Karteikarten-Flow: aufdecken, beantworten, Session laeuft weiter', () => {
     render(<App />);
-    fireEvent.click(screen.getByText('⚡ Jetzt lernen'));
+    fireEvent.click(screen.getByRole('button', { name: /Tagespaket starten/ }));
     // Karte ist sichtbar (Frage-Text vorhanden)
-    expect(screen.getByText('👆 Tippen oder Leertaste zum Aufdecken')).toBeInTheDocument();
+    expect(screen.getByText('Tippen oder Leertaste zum Aufdecken')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Antwort zeigen'));
     expect(screen.getByText('✓ Gewusst')).toBeInTheDocument();
     fireEvent.click(screen.getByText('✓ Gewusst'));
     // Nach der Antwort läuft die Session weiter (Zähler oder Ergebnis sichtbar)
     expect(document.getElementById('app')).toBeTruthy();
+  });
+
+  it('trennt neue Karten von echten Wiederholungen', () => {
+    render(<App />);
+    expect(screen.getByText('Karten im heutigen Paket')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Tagespaket starten · 15/ })).toBeInTheDocument();
+    expect(screen.getByLabelText(/Lehrjahr 1, Grundlagen: 104 Karten, 104 neue Karten/)).toBeInTheDocument();
+    expect(screen.queryByText(/273 Karten sind heute fällig/)).not.toBeInTheDocument();
   });
 });

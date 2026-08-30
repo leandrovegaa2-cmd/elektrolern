@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { mischen } from "../lib/random.js";
 import FormattedAnswer from "./FormattedAnswer.jsx";
 import Diagram from "./Diagram.jsx";
+import Icon from "./Icon.jsx";
 
 const MAX_ZUSATZ = 8; // wie oft falsche Karten max. wieder angehängt werden
 
@@ -19,6 +20,9 @@ export default function FlashcardSession({
       return mischen(kartenOverride).slice(0, 15);
     }
     let karten = progress.faelligVon(gewaehltesLJ, gewaehltesLF);
+    if (!karten.length && !erzwingeUeben) {
+      karten = progress.neuVon(gewaehltesLJ, gewaehltesLF);
+    }
     if (!karten.length || erzwingeUeben) {
       karten = progress.kartenVon(gewaehltesLJ, gewaehltesLF);
     }
@@ -129,7 +133,7 @@ export default function FlashcardSession({
           <div>
             <div className="q">{karte.f}</div>
             {karte.dia ? <Diagram name={karte.dia} /> : null}
-            <div className="tap-hint"><span aria-hidden="true">◎</span> 👆 Tippen oder Leertaste zum Aufdecken</div>
+            <div className="tap-hint"><Icon name="target" size={14} /> Tippen oder Leertaste zum Aufdecken</div>
           </div>
         </div>
       ) : (

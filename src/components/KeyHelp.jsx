@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import Icon from "./Icon.jsx";
 
 // Tastenkürzel-Übersicht als Overlay. Öffnet mit „?", schließt mit Esc, Klick
 // auf den Hintergrund oder den Schließen-Knopf. aria-modal wie ConfirmDialog.
@@ -75,7 +76,7 @@ export default function KeyHelp({ onSchliessen }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="dialog-titel" id="keyhelp-titel">
-          ⌨️ Tastenkürzel
+          <Icon name="keyboard" size={20} /> Tastenkürzel
         </div>
         <div className="keyhelp-body">
           {GRUPPEN.map((g) => (

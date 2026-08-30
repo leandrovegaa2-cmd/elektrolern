@@ -4,6 +4,7 @@ import { FORMELN } from "../../data/formeln.js";
 import { LF_HTML, LF_INFO } from "../../data/lfWissen.js";
 import { LF_NAMEN } from "../../data/namen.js";
 import CardDetail from "../CardDetail.jsx";
+import Icon from "../Icon.jsx";
 
 export default function SearchResults({ query }) {
   const karten = useKarten();
@@ -25,7 +26,7 @@ export default function SearchResults({ query }) {
           <div className="ref-h">Formeln</div>
           <details className="ref" open>
             <summary>
-              📐 Formeln<span className="ref-sub">{formelTreffer.length} Treffer</span>
+              <span className="ref-icon"><Icon name="formula" size={18} /></span> Formeln<span className="ref-sub">{formelTreffer.length} Treffer</span>
             </summary>
             <div className="formel-grid">
               {formelTreffer.map(([f, e]) => (

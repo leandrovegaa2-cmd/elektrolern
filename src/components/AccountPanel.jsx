@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Icon from "./Icon.jsx";
 
 /**
  * Login-Panel für den Geräte-Sync. Zeigt sich nur, wenn Sync konfiguriert ist
@@ -30,7 +31,7 @@ export default function AccountPanel({ sync }) {
     <div className="konto">
       <div className="konto-kopf">
         <span className="konto-ico" aria-hidden="true">
-          ☁️
+          <Icon name="cloud" size={18} />
         </span>
         <span className="konto-titel">Geräte-Sync</span>
       </div>

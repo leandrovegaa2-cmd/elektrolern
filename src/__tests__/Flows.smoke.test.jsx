@@ -118,7 +118,7 @@ describe('Rechentrainer', () => {
     render(<App />);
     fireEvent.click(screen.getByLabelText(/Lehrjahr 1, Grundlagen/));
     fireEvent.click(screen.getByLabelText(/^LF1,/));
-    fireEvent.click(screen.getByText(/🔢 Rechnen/));
+    fireEvent.click(screen.getByRole('button', { name: /Rechnen/ }));
     expect(document.querySelector('.rechen-eingabe input')).toBeTruthy();
   });
 });
@@ -127,7 +127,7 @@ describe('Karten-Editor', () => {
   it('legt eine eigene Karte an, die danach in der App auftaucht', () => {
     render(<App />);
     fireEvent.click(screen.getByText('Fortschritt'));
-    fireEvent.click(screen.getByText('🛠 Karten-Editor öffnen'));
+    fireEvent.click(screen.getByRole('button', { name: /Karten-Editor öffnen/ }));
     fireEvent.click(screen.getByText('＋ Neue Karte'));
 
     fireEvent.change(document.getElementById('ed-f'), { target: { value: 'Selbst gebaute Frage' } });
@@ -141,7 +141,7 @@ describe('Karten-Editor', () => {
   it('meckert bei einer leeren Karte, statt sie zu speichern', () => {
     render(<App />);
     fireEvent.click(screen.getByText('Fortschritt'));
-    fireEvent.click(screen.getByText('🛠 Karten-Editor öffnen'));
+    fireEvent.click(screen.getByRole('button', { name: /Karten-Editor öffnen/ }));
     fireEvent.click(screen.getByText('＋ Neue Karte'));
     fireEvent.click(screen.getByText('Speichern'));
     expect(document.querySelector('.editor-fehler')).toBeTruthy();
@@ -179,14 +179,14 @@ describe('Nachschlagen-Panels', () => {
   it('Wissen-Panel rendert alle 13 Lernfelder ohne Absturz', () => {
     render(<App />);
     fireEvent.click(screen.getByText('Nachschlagen'));
-    fireEvent.click(screen.getByText('📖 Wissen'));
+    fireEvent.click(screen.getByRole('tab', { name: /Wissen/ }));
     expect(document.querySelectorAll('details.ref').length).toBe(13);
   });
 
   it('Karten-Panel rendert Filter-Chips und Kartenliste', () => {
     render(<App />);
     fireEvent.click(screen.getByText('Nachschlagen'));
-    fireEvent.click(screen.getByText('🃏 Karten'));
+    fireEvent.click(screen.getByRole('tab', { name: /Karten/ }));
     expect(screen.getByText('Alle Jahre')).toBeInTheDocument();
     expect(screen.getByText(BASIS_KARTEN.length + ' Karten')).toBeInTheDocument();
   });

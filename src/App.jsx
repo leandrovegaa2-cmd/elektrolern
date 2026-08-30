@@ -17,6 +17,7 @@ import ConfirmDialog from "./components/ConfirmDialog.jsx";
 import KeyHelp from "./components/KeyHelp.jsx";
 import { useHotkeys } from "./hooks/useHotkeys.js";
 import { PRUEF_ANZAHL, PRUEF_RECHNEN } from "./lib/exam.js";
+import Icon from "./components/Icon.jsx";
 
 export default function App() {
   const progress = useProgress();
@@ -86,8 +87,9 @@ export default function App() {
   function onSchnellstart() {
     setGewaehltesLJ(0);
     setGewaehltesLF(null);
-    setKartenOverride(null);
-    setErzwingeUeben(progress.faelligVon(0).length === 0);
+    const paketGroesse = Math.min(progress.state.tagesziel, 15);
+    setKartenOverride(progress.tagespaketVon(0, null, paketGroesse));
+    setErzwingeUeben(false);
     setSessionKey((k) => k + 1);
     setScreen("flash");
   }
@@ -374,7 +376,7 @@ export default function App() {
         aria-label="Tastenkürzel anzeigen"
         title="Tastenkürzel (?)"
       >
-        ⌨️
+        <Icon name="keyboard" size={18} />
       </button>
 
       {hilfeOffen && <KeyHelp onSchliessen={() => setHilfeOffen(false)} />}

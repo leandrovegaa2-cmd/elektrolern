@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { mischen } from "../lib/random.js";
 import { istRichtig, abweichungProzent, formatZahl, STANDARD_TOLERANZ } from "../lib/rechnen.js";
 import { aufgabenSerie } from "../data/rechenVorlagen.js";
+import Icon from "./Icon.jsx";
 
 export const RECHEN_ANZAHL = 10;
 
@@ -133,7 +134,7 @@ export default function RechnenSession({
         <i style={{ transform: `scaleX(${pz / 100})` }} />
       </div>
       <div style={{ textAlign: "center" }}>
-        <span className="lf-badge">{quelle === "generator" ? "🔢 Rechentrainer" : "🔢 Rechnen"} · {a.lf}</span>
+        <span className="lf-badge"><Icon name="calculator" size={14} /> {quelle === "generator" ? "Rechentrainer" : "Rechnen"} · {a.lf}</span>
       </div>
 
       <div className={"rechen-karte" + (geprueft ? (korrekt ? " ok" : " bad") : "")}>

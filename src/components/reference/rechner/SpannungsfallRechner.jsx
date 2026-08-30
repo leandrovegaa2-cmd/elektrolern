@@ -51,7 +51,7 @@ export default function SpannungsfallRechner() {
             <b>Δu</b>
             <span>
               {formatZahl(res.prozent, 2)} %{" "}
-              {ok ? "✓ im Rahmen (≤ 3 %)" : "⚠ über 3 % — größeren Querschnitt wählen"}
+              {ok ? "Im Rahmen (≤ 3 %)" : "Grenzwert überschritten — größeren Querschnitt wählen"}
             </span>
           </div>
           <div className="rf-formel">

@@ -2,6 +2,11 @@ import { FORMELN } from "../../data/formeln.js";
 import { LEITERFARBEN, SICHERHEITSREGELN, FAUSTWERTE, SCHUTZKLASSEN, IP_BEISPIEL } from "../../data/tabellen.js";
 import { SCHALTZEICHEN } from "../../data/schaltzeichen.js";
 import Diagram from "../Diagram.jsx";
+import Icon from "../Icon.jsx";
+
+function SummaryIcon({ name }) {
+  return <span className="ref-icon" aria-hidden="true"><Icon name={name} size={18} /></span>;
+}
 
 function FarbChip({ farbe }) {
   if (farbe === "pe") {
@@ -20,7 +25,7 @@ export default function FormulasPanel() {
     <>
       <details className="ref">
         <summary>
-          📐 Formelsammlung<span className="ref-sub">{FORMELN.length} Grundformeln</span>
+          <SummaryIcon name="formula" /> Formelsammlung<span className="ref-sub">{FORMELN.length} Grundformeln</span>
         </summary>
         <div className="formel-grid">
           {FORMELN.map(([formel, erklaerung]) => (
@@ -34,7 +39,7 @@ export default function FormulasPanel() {
 
       <details className="ref">
         <summary>
-          🎨 Leiterfarben<span className="ref-sub">PE, N, L1–L3</span>
+          <SummaryIcon name="palette" /> Leiterfarben<span className="ref-sub">PE, N, L1–L3</span>
         </summary>
         <div className="ref-body w">
           <div className="kv">
@@ -53,7 +58,7 @@ export default function FormulasPanel() {
 
       <details className="ref">
         <summary>
-          🛑 5 Sicherheitsregeln<span className="ref-sub">Reihenfolge auswendig</span>
+          <SummaryIcon name="safety" /> 5 Sicherheitsregeln<span className="ref-sub">Reihenfolge auswendig</span>
         </summary>
         <div className="ref-body w">
           <ol className="steps">
@@ -66,7 +71,7 @@ export default function FormulasPanel() {
 
       <details className="ref">
         <summary>
-          📏 Faustwerte &amp; Grenzen<span className="ref-sub">Querschnitte, Gefahrenwerte</span>
+          <SummaryIcon name="limits" /> Faustwerte &amp; Grenzen<span className="ref-sub">Querschnitte, Gefahrenwerte</span>
         </summary>
         <div className="ref-body w">
           <div className="w-sec">Leitungsquerschnitte</div>
@@ -92,7 +97,7 @@ export default function FormulasPanel() {
 
       <details className="ref">
         <summary>
-          🛡️ Schutzklassen &amp; IP-Code<span className="ref-sub">Geräte &amp; Gehäuse</span>
+          <SummaryIcon name="safety" /> Schutzklassen &amp; IP-Code<span className="ref-sub">Geräte &amp; Gehäuse</span>
         </summary>
         <div className="ref-body w">
           <div className="w-sec">Schutzklassen</div>
@@ -121,7 +126,7 @@ export default function FormulasPanel() {
 
       <details className="ref">
         <summary>
-          🔌 Schaltzeichen<span className="ref-sub">{SCHALTZEICHEN.length} Symbole erkennen</span>
+          <SummaryIcon name="circuit" /> Schaltzeichen<span className="ref-sub">{SCHALTZEICHEN.length} Symbole erkennen</span>
         </summary>
         <div className="ref-body w">
           <div className="sz-grid">
@@ -138,7 +143,7 @@ export default function FormulasPanel() {
 
       <details className="ref">
         <summary>
-          🗄️ Verteileraufbau<span className="ref-sub">Hauptschalter · FI · LS</span>
+          <SummaryIcon name="distribution" /> Verteileraufbau<span className="ref-sub">Hauptschalter · FI · LS</span>
         </summary>
         <div className="ref-body w">
           <Diagram name="verteiler" />
@@ -147,7 +152,7 @@ export default function FormulasPanel() {
 
       <details className="ref">
         <summary>
-          🎨 Leitungsquerschnitt<span className="ref-sub">NYM-J 5-adrig</span>
+          <SummaryIcon name="cable" /> Leitungsquerschnitt<span className="ref-sub">NYM-J 5-adrig</span>
         </summary>
         <div className="ref-body w">
           <Diagram name="nym5" />

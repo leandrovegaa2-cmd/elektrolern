@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { pruefMix, istFrageKorrekt, istBeantwortet, PRUEF_ANZAHL, PRUEF_RECHNEN, PRUEF_MINUTEN } from "../lib/exam.js";
 import { mischen } from "../lib/random.js";
 import TabBar from "./TabBar.jsx";
+import Icon from "./Icon.jsx";
 
 export default function ExamSession({ progress, onAbbrechen, onErgebnis, onTabWechsel }) {
   const fragen = useMemo(() => {
@@ -137,7 +138,7 @@ export default function ExamSession({ progress, onAbbrechen, onErgebnis, onTabWe
       </div>
       <div style={{ textAlign: "center" }}>
         <span className="lf-badge">
-          {f.typ === "rechnen" ? "🔢 Rechnen · " : ""}Lehrjahr {f.k.j} · {f.k.lf}
+          {f.typ === "rechnen" ? <><Icon name="calculator" size={14} /> Rechnen · </> : null}Lehrjahr {f.k.j} · {f.k.lf}
         </span>
       </div>
 

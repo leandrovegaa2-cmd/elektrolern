@@ -4,6 +4,7 @@ import CardDetail from "./CardDetail.jsx";
 import { useKarten } from "../hooks/useKarten.js";
 import { LF_NAMEN } from "../data/namen.js";
 import { todayISO } from "../lib/date.js";
+import Icon from "./Icon.jsx";
 import {
   karteSpeichern,
   karteLoeschen,
@@ -169,7 +170,7 @@ export default function CardEditor({ onZurueck, onTabWechsel }) {
 
         <div className={"editor-fahne" + (istOriginal ? " korrektur" : "")}>
           <span className="ef-ico" aria-hidden="true">
-            {istOriginal ? "🔧" : "✏️"}
+            <Icon name={istOriginal ? "tools" : "edit"} size={19} />
           </span>
           <span>
             <b>{istOriginal ? "Korrektur an Karte " + form.i : form.i ? "Eigene Karte" : "Neue eigene Karte"}</b>
@@ -333,7 +334,7 @@ export default function CardEditor({ onZurueck, onTabWechsel }) {
           aria-selected={ansicht === "eigene"}
           onClick={() => setAnsicht("eigene")}
         >
-          ✏️ Eigene ({eigene.length})
+          <Icon name="edit" size={16} /> Eigene ({eigene.length})
         </button>
         <button
           className={"seg-btn" + (ansicht === "original" ? " active" : "")}
@@ -341,7 +342,7 @@ export default function CardEditor({ onZurueck, onTabWechsel }) {
           aria-selected={ansicht === "original"}
           onClick={() => setAnsicht("original")}
         >
-          🔧 Korrigieren ({korrigierte.length})
+          <Icon name="tools" size={16} /> Korrigieren ({korrigierte.length})
         </button>
       </div>
 
@@ -395,10 +396,10 @@ export default function CardEditor({ onZurueck, onTabWechsel }) {
           </div>
           <div className="backup-row">
             <button className="mode-btn secondary" onClick={exportieren}>
-              ⬇ Exportieren
+              <Icon name="download" size={18} /> Exportieren
             </button>
             <button className="mode-btn secondary" onClick={() => fileInputRef.current?.click()}>
-              ⬆ Importieren
+              <Icon name="upload" size={18} /> Importieren
             </button>
           </div>
           <input type="file" accept="application/json,.json" hidden ref={fileInputRef} onChange={importieren} />

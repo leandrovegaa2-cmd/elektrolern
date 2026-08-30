@@ -20,7 +20,7 @@ export default function FieldPicker({ progress, gewaehltesLJ, onZurueck, onWaehl
         <p>Lernfeld wählen</p>
         <div className="intro-metrics">
           <span><b>{alleKarten.length}</b> Karten</span>
-          <span><b>{progress.faelligVon(gewaehltesLJ).length}</b> heute fällig</span>
+          <span><b>{progress.faelligVon(gewaehltesLJ).length}</b> Wiederholungen</span>
           <span><b>{progress.fortschrittProzent(gewaehltesLJ)}%</b> gelernt</span>
         </div>
       </section>
@@ -32,6 +32,7 @@ export default function FieldPicker({ progress, gewaehltesLJ, onZurueck, onWaehl
         titel="Ganzes Lehrjahr"
         anzahl={alleKarten.length}
         faellig={progress.faelligVon(gewaehltesLJ).length}
+        neu={progress.neuVon(gewaehltesLJ).length}
         prozent={progress.fortschrittProzent(gewaehltesLJ)}
         onClick={() => onWaehleLF(null)}
       />
@@ -49,6 +50,7 @@ export default function FieldPicker({ progress, gewaehltesLJ, onZurueck, onWaehl
             titel={LF_NAMEN[lf] || ""}
             anzahl={progress.kartenVon(gewaehltesLJ, lf).length}
             faellig={progress.faelligVon(gewaehltesLJ, lf).length}
+            neu={progress.neuVon(gewaehltesLJ, lf).length}
             prozent={progress.fortschrittProzent(gewaehltesLJ, lf)}
             onClick={() => onWaehleLF(lf)}
           />

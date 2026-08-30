@@ -10,6 +10,7 @@ import { schwaechenAnalyse } from "../lib/schwaechen.js";
 import { fehlerVon } from "../lib/problemkarten.js";
 import { todayISO } from "../lib/date.js";
 import { schwelleFuerLevel } from "../lib/xp.js";
+import Icon from "./Icon.jsx";
 
 const BOX_NAMEN = ["Neu", "Box 1", "Box 2", "Box 3", "Box 4", "Box 5", "Box 6"];
 
@@ -143,7 +144,7 @@ export default function ProgressScreen({ progress, sync, onProblemkarten, onLern
             ))}
           </div>
           <button className="next-btn secondary" onClick={onProblemkarten} style={{ marginBottom: 16 }}>
-            🧩 Problemkarten üben
+            <Icon name="problem" size={18} /> Problemkarten üben
           </button>
         </>
       ) : null}
@@ -158,7 +159,7 @@ export default function ProgressScreen({ progress, sync, onProblemkarten, onLern
         return (
           <button className="lf-zeile" key={s.lf} style={{ "--lk": meta.farbe }} onClick={() => onLernfeldUeben(s.lf)}>
             <span className="lz-badge" aria-hidden="true">
-              {meta.icon}
+              <Icon name={meta.icon} size={17} />
             </span>
             <span className="lz-text">
               <span className="lz-name">
@@ -215,10 +216,10 @@ export default function ProgressScreen({ progress, sync, onProblemkarten, onLern
       <div className="sel-line">Dein Lernstand liegt nur in diesem Browser. Sichere ihn, bevor du das Gerät wechselst oder den Cache löschst.</div>
       <div className="backup-row">
         <button className="mode-btn secondary" onClick={exportProgress}>
-          ⬇ Sichern
+          <Icon name="download" size={18} /> Sichern
         </button>
         <button className="mode-btn secondary" onClick={() => fileInputRef.current?.click()}>
-          ⬆ Laden
+          <Icon name="upload" size={18} /> Laden
         </button>
       </div>
       <input type="file" accept="application/json,.json" hidden ref={fileInputRef} onChange={importProgress} />
@@ -228,7 +229,7 @@ export default function ProgressScreen({ progress, sync, onProblemkarten, onLern
         Eigene Karten anlegen — oder eine Original-Karte korrigieren, wenn dir ein Fehler auffällt.
       </div>
       <button className="next-btn secondary" onClick={onEditor} style={{ marginBottom: 16 }}>
-        🛠 Karten-Editor öffnen
+        <Icon name="edit" size={18} /> Karten-Editor öffnen
       </button>
 
       <TabBar aktiv="stats" onWechsel={onTabWechsel} />

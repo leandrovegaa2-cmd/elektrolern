@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MIN_TAGESZIEL, MAX_TAGESZIEL, tageszielGueltig } from "../lib/tagesziel.js";
 import { empfohlenesTagesziel, planText } from "../lib/lernplan.js";
 import { todayISO } from "../lib/date.js";
+import Icon from "./Icon.jsx";
 
 /** Datum als "14.09.2026" — kurz, passt in die Countdown-Pille. */
 function datumKurz(iso) {
@@ -63,14 +64,14 @@ export default function HeuteKarte({
   return (
     <div className={"heute" + (eng ? " eng" : "") + (geschafft ? " fertig" : "")}>
       <div className="h-top">
-        <span className="h-label">🎯 Heute</span>
+        <span className="h-label"><Icon name="target" size={15} /> Heute</span>
         {plan.aktiv && !plan.vorbei ? (
           <button className="h-pille" onClick={oeffneTermin} title={"Prüfung am " + datumKurz(plan.datum)}>
             <b>{plan.tage}</b> {plan.tage === 1 ? "Tag" : "Tage"} bis zur Prüfung
           </button>
         ) : (
           <button className="h-pille leer" onClick={oeffneTermin}>
-            📅 {plan.vorbei ? "Termin abgelaufen" : "Prüfungstermin?"}
+            <Icon name="calendar" size={14} /> {plan.vorbei ? "Termin abgelaufen" : "Prüfungstermin?"}
           </button>
         )}
       </div>
@@ -78,7 +79,7 @@ export default function HeuteKarte({
       <div className="h-zahl">
         <b>{heuteAnzahl}</b>
         <span>
-          / {tagesziel} Karten{geschafft ? " ✓" : ""}
+          / {tagesziel} Karten{geschafft ? " erledigt" : ""}
         </span>
       </div>
       <div className="h-bar" aria-hidden="true">
