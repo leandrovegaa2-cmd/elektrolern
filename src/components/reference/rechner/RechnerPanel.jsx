@@ -21,11 +21,11 @@ const BLOECKE = [
   { titel: "DIN-VDE-Merkzettel", icon: "book", sub: "wichtigste Normen", inhalt: <DinVdeBlock /> },
 ];
 
-export default function RechnerPanel() {
+export default function RechnerPanel({ initialOpen = null }) {
   return (
     <>
       {BLOECKE.map((b) => (
-        <details className="ref" key={b.titel}>
+        <details className="ref" key={b.titel} open={initialOpen === b.titel || undefined}>
           <summary>
             <span className="ref-icon" aria-hidden="true"><Icon name={b.icon} size={18} /></span> {b.titel}
             <span className="ref-sub">{b.sub}</span>

@@ -20,10 +20,10 @@ function FarbChip({ farbe }) {
   return <span className="farb-chip" style={{ background: farbe }} />;
 }
 
-export default function FormulasPanel() {
+export default function FormulasPanel({ initialOpen = null }) {
   return (
     <>
-      <details className="ref">
+      <details className="ref" open={initialOpen === "formeln" || undefined}>
         <summary>
           <SummaryIcon name="formula" /> Formelsammlung<span className="ref-sub">{FORMELN.length} Grundformeln</span>
         </summary>
@@ -37,7 +37,7 @@ export default function FormulasPanel() {
         </div>
       </details>
 
-      <details className="ref">
+      <details className="ref" open={initialOpen === "leiterfarben" || undefined}>
         <summary>
           <SummaryIcon name="palette" /> Leiterfarben<span className="ref-sub">PE, N, L1–L3</span>
         </summary>
@@ -56,7 +56,7 @@ export default function FormulasPanel() {
         </div>
       </details>
 
-      <details className="ref">
+      <details className="ref" open={initialOpen === "sicherheit" || undefined}>
         <summary>
           <SummaryIcon name="safety" /> 5 Sicherheitsregeln<span className="ref-sub">Reihenfolge auswendig</span>
         </summary>
@@ -69,7 +69,7 @@ export default function FormulasPanel() {
         </div>
       </details>
 
-      <details className="ref">
+      <details className="ref" open={initialOpen === "grenzwerte" || undefined}>
         <summary>
           <SummaryIcon name="limits" /> Faustwerte &amp; Grenzen<span className="ref-sub">Querschnitte, Gefahrenwerte</span>
         </summary>
@@ -95,7 +95,7 @@ export default function FormulasPanel() {
         </div>
       </details>
 
-      <details className="ref">
+      <details className="ref" open={initialOpen === "schutzklassen" || undefined}>
         <summary>
           <SummaryIcon name="safety" /> Schutzklassen &amp; IP-Code<span className="ref-sub">Geräte &amp; Gehäuse</span>
         </summary>

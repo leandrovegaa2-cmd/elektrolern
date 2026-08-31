@@ -2,7 +2,7 @@
 /* ElektroLern — Kartendaten. Getrennt von index.html, damit neue Karten
    ohne Code-Angst pflegbar sind. Per <script src> geladen (VOR dem Haupt-Script).
    Läuft file:// UND online — kein fetch/CORS. m = Optionen, ERSTE ist richtig.
-   ⚠️ Nach Kartenänderung: CACHE-Version in sw.js hochzählen. */
+   Nach Kartenänderung: CACHE-Version in sw.js hochzählen. */
 export const KARTEN = [
 // ---------- LEHRJAHR 1 · LF1 ----------
 {i:1,j:1,lf:"LF1",f:"Wie lautet das Ohmsche Gesetz?",

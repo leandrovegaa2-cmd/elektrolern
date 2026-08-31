@@ -194,9 +194,34 @@ describe('Nachschlagen-Panels', () => {
   it('Suche findet Karten ueber Frage/Antwort-Text', () => {
     render(<App />);
     fireEvent.click(screen.getByText('Nachschlagen'));
-    const input = screen.getByPlaceholderText(/Suchen:/);
+    const input = screen.getByRole('searchbox', { name: /Suche im Nachschlagewerk/ });
     fireEvent.change(input, { target: { value: 'Ohmsche' } });
     expect(screen.getByText(/Karten-Treffer/)).toBeInTheDocument();
+  });
+
+  it('durchsucht auch Fachquellen und bietet einen direkten Rechner-Sprung', () => {
+    render(<App />);
+    fireEvent.click(screen.getByText('Nachschlagen'));
+    const input = screen.getByRole('searchbox', { name: /Suche im Nachschlagewerk/ });
+    fireEvent.change(input, { target: { value: '0100-600' } });
+    expect(screen.getByText('Fachquellen')).toBeInTheDocument();
+    expect(screen.getByText('DIN VDE 0100-600:2017-06')).toBeInTheDocument();
+
+    fireEvent.change(input, { target: { value: 'Spannungsfall' } });
+    fireEvent.click(screen.getByRole('button', { name: /Spannungsfall berechnen/ }));
+    expect(screen.getByText('ΔU & Δu in %')).toBeInTheDocument();
+    expect(document.querySelector('details[open]')).toBeTruthy();
+  });
+
+  it('fokussiert die Suche mit Schraegstrich und leert sie mit Escape', () => {
+    render(<App />);
+    fireEvent.click(screen.getByText('Nachschlagen'));
+    const input = screen.getByRole('searchbox', { name: /Suche im Nachschlagewerk/ });
+    fireEvent.keyDown(window, { key: '/' });
+    expect(input).toHaveFocus();
+    fireEvent.change(input, { target: { value: 'KNX' } });
+    fireEvent.keyDown(input, { key: 'Escape' });
+    expect(input).toHaveValue('');
   });
 
   it('zeigt offizielle Fachquellen mit externen Links', () => {

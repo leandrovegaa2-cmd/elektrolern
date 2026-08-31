@@ -19,10 +19,11 @@ describe('App smoke test', () => {
     expect(screen.getByText(/Lehrjahr 4/)).toBeInTheDocument();
   });
 
-  it('navigiert zu Nachschlagen und zeigt die Formelsammlung', () => {
+  it('navigiert zu Nachschlagen und zeigt die neue Schnellübersicht', () => {
     render(<App />);
     fireEvent.click(screen.getByText('Nachschlagen'));
-    expect(screen.getByText(/Formelsammlung/)).toBeInTheDocument();
+    expect(screen.getByText('Was brauchst du gerade?')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Formeln & Tabellen/ })).toBeInTheDocument();
   });
 
   it('navigiert zu Fortschritt und zeigt Statistik-Kacheln', () => {
