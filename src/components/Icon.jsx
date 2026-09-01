@@ -55,6 +55,8 @@ export default function Icon({ name, size = 20, className = "" }) {
     trophy: <><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M8 6H4v2a4 4 0 0 0 5 4m7-6h4v2a4 4 0 0 1-5 4m-3 0v5m-4 3h8"/></>,
     effort: <><path d="M7 20c-2-2-2-5 0-7l5-6 3 3-2 3 2 2 3-3c2 3 1 7-2 9"/><path d="M9 20h7"/></>,
     streak: <><path d="M13 2c1 4-2 5-2 8 0 1.5 1 2 2 2 2 0 3-2 3-4 3 3 4 6 2 9a7 7 0 0 1-12-1c-1-3 1-7 4-9 0 3 1 4 2 4 2-2 1-5 3-9Z"/></>,
+    arrow: <><path d="M5 12h14m-5-5 5 5-5 5"/></>,
+    crystal: <><path d="m12 2 7 7-7 13L5 9l7-7Z"/><path d="m5 9 7 3 7-3M12 2v10m0 0v10"/></>,
     check: <path d="m5 12 4 4L19 6"/>,
     close: <path d="m6 6 12 12M18 6 6 18"/>,
   };

@@ -238,7 +238,7 @@ export default function App() {
   }[screen];
 
   return (
-    <div id="app" role="main">
+    <div id="app" className={`app-screen app-screen-${screen}`} role="main">
       <div aria-live="polite" className="sr-only">
         {screenTitel}
       </div>

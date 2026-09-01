@@ -1,3 +1,5 @@
+import Icon from "./Icon.jsx";
+
 export default function Header({ streak, level }) {
   return (
     <header>
@@ -7,8 +9,10 @@ export default function Header({ streak, level }) {
             <path d="M13.2 2 5.8 13.1h5.5L10.7 22l7.5-12h-5.6L13.2 2Z" />
           </svg>
         </span>
-        <span className="logo-type">Elektro<strong>Lern</strong></span>
-        <span className="logo-signal" aria-hidden="true" />
+        <span className="logo-lockup">
+          <span className="logo-type">Elektro<strong>Lern</strong></span>
+          <small>Energie-Akademie</small>
+        </span>
       </div>
       <div className="header-right">
         {level > 1 ? (
@@ -16,8 +20,8 @@ export default function Header({ streak, level }) {
             LVL {level}
           </span>
         ) : null}
-        <div className="streak num" aria-label={streak + " Tage Streak"}>
-          <span aria-hidden="true">◈</span> {streak}
+        <div className="streak num" aria-label={streak + " Tage Lernserie"}>
+          <Icon name="streak" size={15} /> {streak}
         </div>
       </div>
     </header>
