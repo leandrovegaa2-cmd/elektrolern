@@ -20,9 +20,12 @@ import { PRUEF_ANZAHL, PRUEF_RECHNEN } from "./lib/exam.js";
 import Icon from "./components/Icon.jsx";
 import ErrorNotebook from "./components/ErrorNotebook.jsx";
 import InteractiveSession from "./components/InteractiveSession.jsx";
+import LootboxScreen from "./components/LootboxScreen.jsx";
+import { useRewards } from "./hooks/useRewards.js";
 
 export default function App() {
   const progress = useProgress();
+  const rewards = useRewards(progress.state.xp);
   // Optionaler Geräte-Sync (Supabase). Hängt sich außen an useProgress an und
   // ist ohne konfigurierte Keys still inaktiv.
   const sync = useSync(progress.state, progress.importState);
@@ -67,6 +70,7 @@ export default function App() {
         return setScreen("stats");
       case "ref":
       case "stats":
+      case "werkstatt":
         return setScreen("home");
       default:
         return;
@@ -76,6 +80,7 @@ export default function App() {
   function onTabWechsel(tab) {
     if (tab === "lernen") setScreen("home");
     else if (tab === "ref") setScreen("ref");
+    else if (tab === "werkstatt") setScreen("werkstatt");
     else setScreen("stats");
   }
 
@@ -163,6 +168,7 @@ export default function App() {
       gefahr: true,
       onBestaetigen: () => {
         progress.resetAll();
+        rewards.reset(0);
         setDialog(null);
       },
       onAbbrechen: () => setDialog(null),
@@ -211,6 +217,7 @@ export default function App() {
     hotkeys.l = () => setScreen("home");
     hotkeys.n = () => setScreen("ref");
     hotkeys.f = () => setScreen("stats");
+    hotkeys.w = () => setScreen("werkstatt");
   }
   if (screen === "home") {
     hotkeys.s = onSchnellstart;
@@ -235,6 +242,7 @@ export default function App() {
     ergebnis: "Ergebnis",
     ref: "Nachschlagen",
     stats: "Fortschritt",
+    werkstatt: "Elektro-Werkstatt",
   }[screen];
 
   return (
@@ -253,6 +261,8 @@ export default function App() {
           onInteraktiv={onInteraktiv}
           onFehlerheft={() => setScreen("fehlerheft")}
           onReset={onReset}
+          onWerkstatt={() => setScreen("werkstatt")}
+          voltChips={rewards.state.chips}
           onTabWechsel={onTabWechsel}
         />
       )}
@@ -378,6 +388,15 @@ export default function App() {
       )}
 
       {screen === "ref" && <ReferenceScreen progress={progress} onTabWechsel={onTabWechsel} />}
+
+      {screen === "werkstatt" && (
+        <LootboxScreen
+          rewards={rewards}
+          streak={progress.state.streak.count}
+          level={progress.level}
+          onTabWechsel={onTabWechsel}
+        />
+      )}
 
       {screen === "stats" && (
         <ProgressScreen

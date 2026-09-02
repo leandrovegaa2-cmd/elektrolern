@@ -16,6 +16,7 @@ const GRUPPEN = [
     kuerzel: [
       ["L", "Lernen"],
       ["N", "Nachschlagen"],
+      ["W", "Werkstatt"],
       ["F", "Fortschritt"],
     ],
   },

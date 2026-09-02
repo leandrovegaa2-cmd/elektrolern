@@ -33,6 +33,16 @@ describe('App smoke test', () => {
     expect(screen.getByText(/Gelernt \(Box 2\+\)/)).toBeInTheDocument();
   });
 
+  it('öffnet die Werkstatt mit Energie-Kiste, Chancen und zehn Werkzeugen', () => {
+    render(<App />);
+    fireEvent.click(screen.getByText('Werkstatt'));
+    expect(screen.getByRole('heading', { name: 'Energie-Kiste' })).toBeInTheDocument();
+    expect(screen.getByText('Transparente Chancen')).toBeInTheDocument();
+    expect(screen.getByText('Thermal-Krone')).toBeInTheDocument();
+    expect(document.querySelectorAll('.skin-card')).toHaveLength(10);
+    expect(screen.getByRole('button', { name: /Kiste öffnen/ })).toBeEnabled();
+  });
+
   it('Lehrjahr 1 waehlen fuehrt zur Lernfeld-Auswahl', () => {
     render(<App />);
     fireEvent.click(screen.getByLabelText(/Lehrjahr 1, Grundlagen/));

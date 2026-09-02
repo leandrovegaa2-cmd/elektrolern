@@ -19,6 +19,8 @@ export default function HomeScreen({
   onInteraktiv,
   onFehlerheft,
   onReset,
+  onWerkstatt,
+  voltChips,
   onTabWechsel,
 }) {
   const faelligGesamt = progress.faelligVon(0).length;
@@ -157,16 +159,16 @@ export default function HomeScreen({
         </div>
       </section>
 
-      <section className="reward-preview" aria-label="Belohnungsfortschritt">
+      <button className="reward-preview" aria-label="Elektro-Werkstatt öffnen" onClick={onWerkstatt}>
         <div className="reward-sigil" aria-hidden="true"><Icon name="crystal" size={28} /></div>
         <div className="reward-copy">
           <span>Belohnungspfad · Stufe {progress.level}</span>
-          <h2>Energie-Kern in Arbeit</h2>
-          <p>Noch {progress.xpBisNaechstesLevel} XP bis zur nächsten Stufe.</p>
+          <h2>Werkzeug-Arsenal freischalten</h2>
+          <p>Kisten öffnen · Skins sammeln · Werkzeuge ausrüsten</p>
         </div>
-        <div className="reward-xp num">{progress.state.xp || 0}<small> XP</small></div>
+        <div className="reward-xp num">{voltChips}<small> CHIPS</small></div>
         <div className="reward-bar" aria-hidden="true"><i style={{ transform: `scaleX(${progress.levelProgress})` }} /></div>
-      </section>
+      </button>
 
       <div className="footer-note">
         {progress.karten.length} Karten · LF 1–13 · Fortschritt bleibt in diesem Browser gespeichert.

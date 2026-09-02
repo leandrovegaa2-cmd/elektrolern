@@ -1,0 +1,92 @@
+export const SELTENHEITEN = {
+  standard: { label: "Standard", chance: 40, farbe: "#b8c0b5", duplikat: 45 },
+  ungewoehnlich: { label: "Ungewöhnlich", chance: 30, farbe: "#67dcae", duplikat: 70 },
+  selten: { label: "Selten", chance: 20, farbe: "#55a7ff", duplikat: 110 },
+  episch: { label: "Episch", chance: 8, farbe: "#b779ff", duplikat: 175 },
+  meisterstueck: { label: "Meisterstück", chance: 2, farbe: "#f2c866", duplikat: 250 },
+};
+
+export const SKINS = [
+  {
+    id: "volt-waechter",
+    name: "Volt-Wächter",
+    werkzeug: "Zweipoliger Spannungsprüfer",
+    seltenheit: "standard",
+    bild: "skins/volt-waechter.jpg",
+    beschreibung: "Klarer Statusschein und ruhige Leiterbahn-Impulse.",
+  },
+  {
+    id: "drehmoment-null",
+    name: "Drehmoment Null",
+    werkzeug: "Isolierter Schraubendreher",
+    seltenheit: "standard",
+    bild: "skins/drehmoment-null.jpg",
+    beschreibung: "Kupferkern mit kontrolliertem Funkenlauf.",
+  },
+  {
+    id: "kupferbiss",
+    name: "Kupferbiss",
+    werkzeug: "Abisolierzange",
+    seltenheit: "ungewoehnlich",
+    bild: "skins/kupferbiss.jpg",
+    beschreibung: "Warme Energielinien folgen jeder Schneide.",
+  },
+  {
+    id: "frostpress",
+    name: "Frostpress",
+    werkzeug: "Crimpzange",
+    seltenheit: "ungewoehnlich",
+    bild: "skins/frostpress.jpg",
+    beschreibung: "Kalte Partikel und ein präziser Cyan-Ring.",
+  },
+  {
+    id: "solarklaue",
+    name: "Solarklaue",
+    werkzeug: "Stromzange",
+    seltenheit: "ungewoehnlich",
+    bild: "skins/solarklaue.jpg",
+    beschreibung: "Goldene Umlaufbahn mit sonnigem Nachglühen.",
+  },
+  {
+    id: "phasenschnitt",
+    name: "Phasenschnitt",
+    werkzeug: "Seitenschneider",
+    seltenheit: "selten",
+    bild: "skins/phasenschnitt.jpg",
+    beschreibung: "Rote Lichtbögen zerlegen den Raum in Splitter.",
+  },
+  {
+    id: "impulsbohrer",
+    name: "Impulsbohrer",
+    werkzeug: "Akku-Bohrschrauber",
+    seltenheit: "selten",
+    bild: "skins/impulsbohrer.jpg",
+    beschreibung: "Blaue Druckwellen laden sich am Bohrkopf auf.",
+  },
+  {
+    id: "leitungsgeist",
+    name: "Leitungsgeist",
+    werkzeug: "Leitungs- und Balkensucher",
+    seltenheit: "selten",
+    bild: "skins/leitungsgeist.jpg",
+    beschreibung: "Ein Hologramm scannt verborgene Leitungswege.",
+  },
+  {
+    id: "iso-guardian",
+    name: "Iso-Guardian",
+    werkzeug: "Isolationsmessgerät",
+    seltenheit: "episch",
+    bild: "skins/iso-guardian.jpg",
+    beschreibung: "Schwebende Panzerplatten kreisen im Energieportal.",
+  },
+  {
+    id: "thermal-krone",
+    name: "Thermal-Krone",
+    werkzeug: "Wärmebildkamera",
+    seltenheit: "meisterstueck",
+    bild: "skins/thermal-krone.jpg",
+    beschreibung: "Ein exklusiver Energiewirbel formt eine Lichtkrone.",
+  },
+];
+
+export const SKIN_MAP = Object.fromEntries(SKINS.map((skin) => [skin.id, skin]));
