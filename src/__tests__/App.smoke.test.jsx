@@ -38,8 +38,10 @@ describe('App smoke test', () => {
     fireEvent.click(screen.getByText('Werkstatt'));
     expect(screen.getByRole('heading', { name: 'Energie-Kiste' })).toBeInTheDocument();
     expect(screen.getByText('Transparente Chancen')).toBeInTheDocument();
-    expect(screen.getByText('Thermal-Krone')).toBeInTheDocument();
+    expect(screen.getAllByText('Thermal-Krone').length).toBeGreaterThanOrEqual(1);
     expect(document.querySelectorAll('.skin-card')).toHaveLength(10);
+    expect(screen.getByLabelText('Werkzeug-Walze bereit')).toBeInTheDocument();
+    expect(document.querySelectorAll('.reel-card')).toHaveLength(30);
     expect(screen.getByRole('button', { name: /Kiste öffnen/ })).toBeEnabled();
   });
 
