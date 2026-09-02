@@ -15,6 +15,7 @@ export function leererBelohnungsstand(xp = 0) {
     pity: 0,
     geoeffnet: 0,
     verlauf: [],
+    slotVerlauf: [],
   };
 }
 
@@ -30,6 +31,7 @@ export function normalisiereBelohnungsstand(rohdaten, xp = 0) {
     pity: Math.max(0, Math.min(PITY_GRENZE - 1, Number(rohdaten.pity) || 0)),
     geoeffnet: Math.max(0, Number(rohdaten.geoeffnet) || 0),
     verlauf: Array.isArray(rohdaten.verlauf) ? rohdaten.verlauf.slice(0, 12) : [],
+    slotVerlauf: Array.isArray(rohdaten.slotVerlauf) ? rohdaten.slotVerlauf.slice(0, 12) : [],
   };
 }
 

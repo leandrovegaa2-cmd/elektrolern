@@ -37,7 +37,7 @@ function baueWalze(gewinner) {
   };
 }
 
-export default function LootboxScreen({ rewards, streak, level, onTabWechsel }) {
+export default function LootboxScreen({ rewards, streak, level, onCasino, onTabWechsel }) {
   const [oeffnet, setOeffnet] = useState(false);
   const [fund, setFund] = useState(null);
   const [walze, setWalze] = useState(null);
@@ -87,6 +87,12 @@ export default function LootboxScreen({ rewards, streak, level, onTabWechsel }) 
             <small>Volt-Chips</small>
           </div>
         </section>
+
+        <button className="casino-entry" onClick={onCasino}>
+          <span className="casino-entry-icon"><Icon name="slotCasino" size={28} /></span>
+          <span><small>18+ Spielmodus · getrennt vom Arsenal</small><b>Volt Vault Casino</b><em>5×3 Walzen · 10 Gewinnlinien · nur Volt-Chips</em></span>
+          <span className="casino-entry-action">Casino öffnen <Icon name="arrow" size={17} /></span>
+        </button>
 
         <section className="crate-console case-console" aria-labelledby="crate-title">
           <div className="crate-info case-info">

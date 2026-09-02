@@ -62,6 +62,9 @@ export default function Icon({ name, size = 20, className = "" }) {
     box: <><path d="m4 8 8-4 8 4-8 4-8-4Z"/><path d="M4 8v8l8 4 8-4V8M12 12v8"/><path d="m8 6 8 4"/></>,
     lock: <><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v2"/></>,
     equip: <><path d="M4 18 15 7m-7-2 3-2 10 10-2 3"/><path d="m5 14-2 3 4 4 3-2"/></>,
+    slotCasino: <><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M7 7h10v8H7zM9 10h.01m3-.01h.01m3 .01h.01M8 18h8"/></>,
+    slotWild: <><path d="m12 2 2.1 6.2L20 5l-3.2 5.9L23 12l-6.2 1.1L20 19l-5.9-3.2L12 22l-2.1-6.2L4 19l3.2-5.9L1 12l6.2-1.1L4 5l5.9 3.2L12 2Z"/><circle cx="12" cy="12" r="3"/></>,
+    slotSpin: <><path d="M19 8a8 8 0 1 0 1 7"/><path d="M19 3v5h-5"/><path d="m12 8 1.2 2.8L16 12l-2.8 1.2L12 16l-1.2-2.8L8 12l2.8-1.2L12 8Z"/></>,
     check: <path d="m5 12 4 4L19 6"/>,
     close: <path d="m6 6 12 12M18 6 6 18"/>,
   };

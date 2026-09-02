@@ -22,6 +22,7 @@ import ErrorNotebook from "./components/ErrorNotebook.jsx";
 import InteractiveSession from "./components/InteractiveSession.jsx";
 import LootboxScreen from "./components/LootboxScreen.jsx";
 import { useRewards } from "./hooks/useRewards.js";
+import SlotCasino from "./components/SlotCasino.jsx";
 
 export default function App() {
   const progress = useProgress();
@@ -72,6 +73,8 @@ export default function App() {
       case "stats":
       case "werkstatt":
         return setScreen("home");
+      case "casino":
+        return setScreen("werkstatt");
       default:
         return;
     }
@@ -243,6 +246,7 @@ export default function App() {
     ref: "Nachschlagen",
     stats: "Fortschritt",
     werkstatt: "Elektro-Werkstatt",
+    casino: "Volt Vault Casino",
   }[screen];
 
   return (
@@ -394,6 +398,17 @@ export default function App() {
           rewards={rewards}
           streak={progress.state.streak.count}
           level={progress.level}
+          onCasino={() => setScreen("casino")}
+          onTabWechsel={onTabWechsel}
+        />
+      )}
+
+      {screen === "casino" && (
+        <SlotCasino
+          rewards={rewards}
+          streak={progress.state.streak.count}
+          level={progress.level}
+          onZurueck={() => setScreen("werkstatt")}
           onTabWechsel={onTabWechsel}
         />
       )}

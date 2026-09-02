@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { SKIN_MAP } from "../data/skins.js";
 import { leererBelohnungsstand, normalisiereBelohnungsstand, oeffneEnergieKiste } from "../lib/lootbox.js";
+import { spieleSlotRunde } from "../lib/slot.js";
 
 const STORAGE_KEY = "elektrolern_rewards_v1";
 
@@ -46,7 +47,16 @@ export function useRewards(xp) {
     });
   }, []);
 
+  const slotDrehen = useCallback(
+    (einsatz, zufall) => {
+      const ergebnis = spieleSlotRunde(state, einsatz, zufall);
+      if (ergebnis.ok) setState(speichern(ergebnis.state));
+      return ergebnis;
+    },
+    [state]
+  );
+
   const reset = useCallback((neuesXp = 0) => setState(speichern(leererBelohnungsstand(neuesXp))), []);
 
-  return { state, kisteOeffnen, ausruesten, reset };
+  return { state, kisteOeffnen, ausruesten, slotDrehen, reset };
 }

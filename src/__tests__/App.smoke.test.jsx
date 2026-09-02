@@ -45,6 +45,17 @@ describe('App smoke test', () => {
     expect(screen.getByRole('button', { name: /Kiste öffnen/ })).toBeEnabled();
   });
 
+  it('öffnet das eigenständige 5x3 Slot-Casino aus der Werkstatt', () => {
+    render(<App />);
+    fireEvent.click(screen.getByText('Werkstatt'));
+    fireEvent.click(screen.getByRole('button', { name: /Volt Vault Casino/ }));
+    expect(screen.getByRole('heading', { name: /VoltVault/ })).toBeInTheDocument();
+    expect(screen.getByText('Auszahlungstabelle')).toBeInTheDocument();
+    expect(document.querySelectorAll('.slot-reel')).toHaveLength(5);
+    expect(document.querySelectorAll('.slot-symbol')).toHaveLength(15);
+    expect(screen.getByRole('button', { name: /Drehen/ })).toBeEnabled();
+  });
+
   it('Lehrjahr 1 waehlen fuehrt zur Lernfeld-Auswahl', () => {
     render(<App />);
     fireEvent.click(screen.getByLabelText(/Lehrjahr 1, Grundlagen/));
