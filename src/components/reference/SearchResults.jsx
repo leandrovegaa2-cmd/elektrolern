@@ -20,6 +20,7 @@ const PRAXISWISSEN = [
   { id: "ohm", titel: "Ohmsches Gesetz berechnen", text: "Spannung Strom Widerstand U R I Rechner", icon: "calculator", segment: "rechner", ziel: "Ohmsches Gesetz" },
   { id: "spannungsfall", titel: "Spannungsfall berechnen", text: "Delta U Prozent Leitung Länge Querschnitt", icon: "trend", segment: "rechner", ziel: "Spannungsfall" },
   { id: "rcd", titel: "FI/RCD auswählen", text: "Fehlerstrom Schutzschalter Typ Bemessungsstrom 30 mA", icon: "safety", segment: "rechner", ziel: "FI/RCD-Auswahl" },
+  { id: "lichttechnik", titel: "Lichtechnik", text: "Lux Lumen Candela Leuchtdichte LED Farbwiedergabe Farbtemperatur Blendung Wartungsfaktor Leuchtenzahl DALI Energieeffizienz IP Schutzart ASR Beleuchtung", icon: "light", segment: "licht", ziel: null },
 ];
 
 function BereichTitel({ icon, children, count }) {

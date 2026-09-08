@@ -29,6 +29,8 @@ export default function Icon({ name, size = 20, className = "" }) {
     house: <><path d="m3.5 11 8.5-7 8.5 7M6 9.5V20h12V9.5"/><path d="M9 20v-6h6v6"/></>,
     water: <><path d="M12 3s5 6 5 10a5 5 0 0 1-10 0c0-4 5-10 5-10Z"/><path d="M9.5 14.5c.6 1 1.4 1.5 2.5 1.5"/></>,
     solar: <><circle cx="12" cy="8" r="3"/><path d="M12 2v2m0 8v2M6 8H4m16 0h-2M7.8 3.8 6.4 2.4m9.8 1.4 1.4-1.4M5 21h14l-1.5-6h-11L5 21Zm4-3h6"/></>,
+    light: <><path d="M9 18h6m-5 3h4"/><path d="M8.5 15.5A6 6 0 1 1 15.5 15.5C14.5 16.2 14 17 14 18h-4c0-1-.5-1.8-1.5-2.5Z"/><path d="M12 2V.5M4.8 5.1 3.7 4m15.5 1.1L20.3 4M5 12H3m18 0h-2"/></>,
+    conversation: <><path d="M4 5.5h10a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3H9l-4 3v-3.3a3 3 0 0 1-2-2.8V8.5a3 3 0 0 1 1-3Z"/><path d="M17 9h1a3 3 0 0 1 3 3v3a3 3 0 0 1-2 2.8V21l-4-3h-3"/><path d="M7 9.5h6m-6 3h4"/></>,
     plan: <><path d="M4 20 20 4M6 4h14v14"/><path d="m9 15 2 2m1-5 2 2m1-5 2 2"/></>,
     tools: <><path d="m14 6 4-3 3 3-3 4m-2 2-7 7a2.1 2.1 0 0 1-3-3l7-7"/><path d="m4 5 4 4m-2-6 4 4"/></>,
     layers: <><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m4 12 8 4 8-4m-16 4 8 4 8-4"/></>,

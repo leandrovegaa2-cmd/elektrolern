@@ -26,6 +26,27 @@ describe('App smoke test', () => {
     expect(screen.getByRole('button', { name: /Formeln & Tabellen/ })).toBeInTheDocument();
   });
 
+  it('öffnet Lichtechnik direkt vom Dashboard und berechnet eine Vorplanung', () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: /Lichtechnik/ }));
+    expect(screen.getByRole('heading', { name: /Lichtechnik richtig planen/ })).toBeInTheDocument();
+    expect(screen.getByText('Leuchtenzahl vorplanen')).toBeInTheDocument();
+    expect(screen.getByText('13')).toBeInTheDocument();
+    expect(screen.getByText(/Vorplanung, kein Normnachweis/)).toBeInTheDocument();
+  });
+
+  it('erstellt ein Fachgespräch, bewertet freien Text und zeigt Kernpunkte', () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: /Fachgespräch/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Fachgespräch erstellen und starten/ }));
+    expect(screen.getByText(/Frage 1 von 4/)).toBeInTheDocument();
+    const antwort = screen.getByPlaceholderText(/Antworte in vollständigen/);
+    fireEvent.change(antwort, { target: { value: 'Ich kläre Sehaufgabe und Nutzung, vermesse Raum und Bestand, prüfe ASR und Gefährdungsbeurteilung sowie Staub und IP.' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Antwort auswerten' }));
+    expect(screen.getByText('100%')).toBeInTheDocument();
+    expect(screen.getByText('Fachlich sicher.')).toBeInTheDocument();
+  });
+
   it('navigiert zu Fortschritt und zeigt Statistik-Kacheln', () => {
     render(<App />);
     fireEvent.click(screen.getByText('Fortschritt'));

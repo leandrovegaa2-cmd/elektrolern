@@ -1,6 +1,6 @@
 // Karten-Quelle mit eigenen Karten und Korrekturen.
 //
-// Die 247 mitgelieferten Karten stehen fest im Code (data/karten.js +
+// Die mitgelieferten Karten stehen fest im Code (data/karten.js +
 // data/rechenkarten.js). Der Editor legt NICHTS davon an — er speichert
 // zusätzlich in localStorage:
 //   eigene       … selbst angelegte Karten (IDs "e1", "e2", …)
@@ -17,11 +17,12 @@ import { KARTEN as STAMM } from "../data/karten.js";
 import { RECHENKARTEN } from "../data/rechenkarten.js";
 import { BILD_KARTEN } from "../data/bildkarten.js";
 import { VISUELL_KARTEN } from "../data/visuellKarten.js";
+import { LICHT_KARTEN } from "../data/lichttechnik.js";
 
 export const LS_KARTEN = "elektrolern_karten_v1";
 
 /** Alle fest eingebauten Karten (Original-Stand, nie verändert). */
-export const BASIS_KARTEN = [...STAMM, ...RECHENKARTEN, ...BILD_KARTEN, ...VISUELL_KARTEN];
+export const BASIS_KARTEN = [...STAMM, ...RECHENKARTEN, ...BILD_KARTEN, ...VISUELL_KARTEN, ...LICHT_KARTEN];
 
 export function leererKartenStore() {
   return { eigene: [], korrekturen: {} };

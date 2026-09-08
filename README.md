@@ -19,9 +19,10 @@ sofort deployen kannst, ohne selbst Node zu installieren.
 
 ## Architektur
 
-- `src/data/` — Kartendaten (247 Karten: 198 1:1 aus `website/karten.js` übernommen,
+- `src/data/` — Kartendaten (293 Karten: 198 1:1 aus `website/karten.js` übernommen,
   21 Karten i199–i219 vom 20.07.2026, 28 Rechenkarten i220–i247 in
-  `rechenkarten.js`, siehe `../03 Fachcheck-Report.md`), Rechen-Vorlagen für den
+  `rechenkarten.js`, 26 visuelle Karten und 20 geprüfte Lichtechnik-Karten;
+  siehe `../03 Fachcheck-Report.md`), Rechen-Vorlagen für den
   Generator (`rechenVorlagen.js`), Formeln, Schaubilder (SVG), Lernfeld-Wissen,
   Praxis-Tabellen.
 - `src/lib/` — reine, getestete Funktionen ohne React-Abhängigkeit: Leitner-Algorithmus,
@@ -33,11 +34,23 @@ sofort deployen kannst, ohne selbst Node zu installieren.
   Karten-Store (`useSyncExternalStore`), damit Editor-Änderungen sofort überall
   ankommen, ohne Context-Provider um die ganze App.
 - `src/components/` — je ein Screen/Baustein pro Datei statt einer 1764-Zeilen-`index.html`.
-- `src/__tests__/`, `src/lib/__tests__/` — Vitest: 130 Tests (Logik + End-to-End-Rendering
+- `src/__tests__/`, `src/lib/__tests__/` — Vitest: 196 Tests (Logik + End-to-End-Rendering
   mit React Testing Library), decken Karteikarten-, Quiz-, Prüfungs-, Rechen- und
   Editor-Flow ab.
 
 ## Was neu ist ggü. der Vanilla-Version
+
+- **Lichtechnik** (08.09.2026): eigener Nachschlagebereich mit Lichtgrößen,
+  lichttechnischen Berechnungen, LED und Betriebsgeräten, Lichtqualität, DALI,
+  Schutzarten, ASR-Praxiswerten, Planungscheckliste und einem klar als
+  Überschlagsrechnung gekennzeichneten Leuchtenzahl-Rechner. 20 neue Karten sind
+  in LF10 eingebunden; die verwendeten Primär- und Normquellen stehen direkt an
+  den Inhalten.
+- **Situatives Fachgespräch** (08.09.2026): drei auftragsbezogene Szenarien mit
+  freien Antworten, transparenter Kernpunktauswertung, einer adaptiven Nachfrage
+  und einem kopierbaren Prüfprotokoll. Die Trainingsphasen und Gewichtung lehnen
+  sich an den IHK-Musterbogen an; die Anzeige kennzeichnet ausdrücklich, dass sie
+  keine offizielle IHK-Bewertung ersetzt.
 
 - **Persistente Schwächen-Ansicht** im Fortschritt-Tab (nicht nur nach einer Prüfung).
 - **XP & Level** neben dem Streak — dezent, passend zur Markenpersönlichkeit

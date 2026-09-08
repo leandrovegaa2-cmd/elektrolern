@@ -8,19 +8,21 @@ import RechnerPanel from "./reference/rechner/RechnerPanel.jsx";
 import SearchResults from "./reference/SearchResults.jsx";
 import SourcesPanel from "./reference/SourcesPanel.jsx";
 import ReferenceOverview from "./reference/ReferenceOverview.jsx";
+import LichttechnikPanel from "./reference/LichttechnikPanel.jsx";
 import Icon from "./Icon.jsx";
 
 const SEGMENTE = [
   { id: "uebersicht", label: "Übersicht", icon: "search" },
   { id: "formeln", label: "Formeln", icon: "formula" },
   { id: "rechner", label: "Rechner", icon: "calculator" },
+  { id: "licht", label: "Licht", icon: "light" },
   { id: "wissen", label: "Wissen", icon: "book" },
   { id: "karten", label: "Karten", icon: "layers" },
   { id: "quellen", label: "Quellen", icon: "safety" },
 ];
 
-export default function ReferenceScreen({ progress, onTabWechsel }) {
-  const [seg, setSeg] = useState("uebersicht");
+export default function ReferenceScreen({ progress, onTabWechsel, initialSegment = "uebersicht", onFachgespraech }) {
+  const [seg, setSeg] = useState(initialSegment);
   const [query, setQuery] = useState("");
   const [panelZiel, setPanelZiel] = useState(null);
   const suchRef = useRef(null);
@@ -94,6 +96,8 @@ export default function ReferenceScreen({ progress, onTabWechsel }) {
         <FormulasPanel key={panelZiel || "formeln"} initialOpen={panelZiel} />
       ) : seg === "rechner" ? (
         <RechnerPanel key={panelZiel || "rechner"} initialOpen={panelZiel} />
+      ) : seg === "licht" ? (
+        <LichttechnikPanel onFachgespraech={onFachgespraech} />
       ) : seg === "wissen" ? (
         <WissenPanel />
       ) : seg === "quellen" ? (

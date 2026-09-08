@@ -4,6 +4,7 @@ const BEREICHE = [
   { id: "formeln", icon: "formula", wert: "14", label: "Formeln & Tabellen", text: "Grundformeln, Leiterfarben, Schutzklassen und Schaltzeichen." },
   { id: "rechner", icon: "calculator", wert: "6", label: "Fachrechner", text: "Ohm, Leistung, Spannungsfall, Querschnitt, Sicherung und RCD." },
   { id: "wissen", icon: "book", wert: "13", label: "Lernfelder", text: "Das kompakte Wissen aus LF 1 bis LF 13 an einem Ort." },
+  { id: "licht", icon: "light", wert: "20", label: "Lichtechnik", text: "Lichtgrößen, LED, Planung, Praxiswerte und ein eigener Rechner." },
   { id: "karten", icon: "layers", wert: "273", label: "Karten", text: "Alle Fragen und Antworten nach Lehrjahr und Lernfeld filtern." },
 ];
 
@@ -11,6 +12,7 @@ const DIREKT = [
   { icon: "safety", titel: "5 Sicherheitsregeln", sub: "Reihenfolge sicher beherrschen", segment: "formeln", ziel: "sicherheit" },
   { icon: "calculator", titel: "Ohmsches Gesetz", sub: "U, R und I direkt berechnen", segment: "rechner", ziel: "Ohmsches Gesetz" },
   { icon: "trend", titel: "Spannungsfall", sub: "Volt und Prozent bestimmen", segment: "rechner", ziel: "Spannungsfall" },
+  { icon: "light", titel: "Beleuchtungsplanung", sub: "Lux, Leuchtenzahl und Blendung", segment: "licht", ziel: null },
   { icon: "palette", titel: "Leiterfarben", sub: "PE, N und L1 bis L3", segment: "formeln", ziel: "leiterfarben" },
 ];
 

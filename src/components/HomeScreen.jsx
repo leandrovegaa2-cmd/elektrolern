@@ -17,6 +17,8 @@ export default function HomeScreen({
   onProblemkarten,
   onRechentrainer,
   onInteraktiv,
+  onFachgespraech,
+  onLichttechnik,
   onFehlerheft,
   onReset,
   onWerkstatt,
@@ -113,6 +115,18 @@ export default function HomeScreen({
           <span className="training-icon" aria-hidden="true"><Icon name="circuit" /></span>
           <span className="q-titel">Interaktiv</span>
           <span className="q-sub">Sortieren &amp; zuordnen</span>
+        </button>
+        <button className="training-card training-card-talk" onClick={onFachgespraech}>
+          <span className="training-code">DIALOG</span>
+          <span className="training-icon" aria-hidden="true"><Icon name="conversation" /></span>
+          <span className="q-titel">Fachgespräch</span>
+          <span className="q-sub">Freie Antworten &amp; adaptive Nachfragen</span>
+        </button>
+        <button className="training-card training-card-light" onClick={onLichttechnik}>
+          <span className="training-code">LIGHT / 20</span>
+          <span className="training-icon" aria-hidden="true"><Icon name="light" /></span>
+          <span className="q-titel">Lichtechnik</span>
+          <span className="q-sub">Lux, LED, Planung &amp; Rechner</span>
         </button>
         <button className={"training-card" + (offeneFehler ? " warn" : "")} onClick={onFehlerheft}>
           <span className="training-code">FIX / {offeneFehler}</span>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProgress } from "./hooks/useProgress.js";
 import { useSync } from "./hooks/useSync.js";
 import HomeScreen from "./components/HomeScreen.jsx";
@@ -23,6 +23,7 @@ import InteractiveSession from "./components/InteractiveSession.jsx";
 import LootboxScreen from "./components/LootboxScreen.jsx";
 import { useRewards } from "./hooks/useRewards.js";
 import SlotCasino from "./components/SlotCasino.jsx";
+import FachgespraechSimulator from "./components/FachgespraechSimulator.jsx";
 
 export default function App() {
   const progress = useProgress();
@@ -40,9 +41,17 @@ export default function App() {
   const [pruefErgebnis, setPruefErgebnis] = useState(null);
   const [rechenQuelle, setRechenQuelle] = useState("karten");
   const [sessionKey, setSessionKey] = useState(0);
+  const [referenzStart, setReferenzStart] = useState("uebersicht");
   // In-App-Dialog statt nativem alert()/confirm(). null = kein Dialog offen.
   const [dialog, setDialog] = useState(null);
   const [hilfeOffen, setHilfeOffen] = useState(false);
+
+  // Jeder Bildschirm startet oben. Ohne diesen Reset blieb beim Wechsel von
+  // einer langen Seite die alte Scrollposition erhalten.
+  useEffect(() => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [screen, referenzStart]);
 
   function gehHeim() {
     setScreen("home");
@@ -64,6 +73,7 @@ export default function App() {
       case "pruefung":
         return gehHeim();
       case "interaktiv":
+      case "fachgespraech":
         return gehHeim();
       case "editor":
         return setScreen("stats");
@@ -82,7 +92,7 @@ export default function App() {
 
   function onTabWechsel(tab) {
     if (tab === "lernen") setScreen("home");
-    else if (tab === "ref") setScreen("ref");
+    else if (tab === "ref") oeffneReferenz();
     else if (tab === "werkstatt") setScreen("werkstatt");
     else setScreen("stats");
   }
@@ -204,21 +214,31 @@ export default function App() {
     setScreen("rechnen");
   }
 
+  function oeffneReferenz(segment = "uebersicht") {
+    setReferenzStart(segment);
+    setScreen("ref");
+  }
+
   function onInteraktiv() {
     setSessionKey((k) => k + 1);
     setScreen("interaktiv");
   }
 
+  function onFachgespraech() {
+    setSessionKey((k) => k + 1);
+    setScreen("fachgespraech");
+  }
+
   // Globale Tastenkürzel. Buchstaben (nicht Ziffern), damit im Quiz die 1–4
   // frei bleiben. Während Session nur „?" + Esc, sonst auch die Navigation.
-  const istSession = ["flash", "quiz", "rechnen", "pruefung", "interaktiv"].includes(screen);
+  const istSession = ["flash", "quiz", "rechnen", "pruefung", "interaktiv", "fachgespraech"].includes(screen);
   const hotkeys = {
     "?": () => setHilfeOffen((v) => !v),
     Escape: aufEsc,
   };
   if (!istSession) {
     hotkeys.l = () => setScreen("home");
-    hotkeys.n = () => setScreen("ref");
+    hotkeys.n = () => oeffneReferenz();
     hotkeys.f = () => setScreen("stats");
     hotkeys.w = () => setScreen("werkstatt");
   }
@@ -238,6 +258,7 @@ export default function App() {
     quiz: "Quiz",
     rechnen: "Rechnen",
     interaktiv: "Interaktiv üben",
+    fachgespraech: "Fachgespräch",
     fehlerheft: "Fehlerheft",
     editor: "Karten bearbeiten",
     pruefung: "Prüfungssimulation",
@@ -263,6 +284,8 @@ export default function App() {
           onProblemkarten={onProblemkarten}
           onRechentrainer={onRechentrainer}
           onInteraktiv={onInteraktiv}
+          onFachgespraech={onFachgespraech}
+          onLichttechnik={() => oeffneReferenz("licht")}
           onFehlerheft={() => setScreen("fehlerheft")}
           onReset={onReset}
           onWerkstatt={() => setScreen("werkstatt")}
@@ -351,6 +374,15 @@ export default function App() {
         />
       )}
 
+      {screen === "fachgespraech" && (
+        <FachgespraechSimulator
+          key={"fachgespraech-" + sessionKey}
+          progress={progress}
+          onAbbrechen={gehHeim}
+          onLichttechnik={() => oeffneReferenz("licht")}
+        />
+      )}
+
       {screen === "fehlerheft" && (
         <ErrorNotebook progress={progress} onUeben={uebeKarten} onTabWechsel={onTabWechsel} />
       )}
@@ -391,7 +423,7 @@ export default function App() {
         />
       )}
 
-      {screen === "ref" && <ReferenceScreen progress={progress} onTabWechsel={onTabWechsel} />}
+      {screen === "ref" && <ReferenceScreen key={referenzStart} progress={progress} initialSegment={referenzStart} onFachgespraech={onFachgespraech} onTabWechsel={onTabWechsel} />}
 
       {screen === "werkstatt" && (
         <LootboxScreen
