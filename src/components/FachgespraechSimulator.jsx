@@ -123,6 +123,7 @@ export default function FachgespraechSimulator({ progress, onAbbrechen, onLichtt
   const [szenario, setSzenario] = useState(null);
   const [kontext, setKontext] = useState("");
   const [fragen, setFragen] = useState([]);
+  const [zielAnzahl, setZielAnzahl] = useState(5);
   const [index, setIndex] = useState(0);
   const [antwort, setAntwort] = useState("");
   const [feedback, setFeedback] = useState(null);
@@ -147,6 +148,7 @@ export default function FachgespraechSimulator({ progress, onAbbrechen, onLichtt
     setSzenario(auswahl);
     setKontext(config.kontext.trim());
     setFragen(erstelleFachgespraech(auswahl, config.anzahl, config.niveau));
+    setZielAnzahl(Number(config.anzahl) || 5);
     setIndex(0);
     setAntwort("");
     setFeedback(null);
@@ -193,10 +195,11 @@ export default function FachgespraechSimulator({ progress, onAbbrechen, onLichtt
 
   const frage = fragen[index];
   const phase = FACHGESPRAECH_PHASES.find((item) => item.id === frage.phase);
+  const angezeigteAnzahl = Math.max(zielAnzahl, fragen.length);
   return (
     <div className="talk-session">
-      <div className="talk-topbar"><button className="back" onClick={onAbbrechen} aria-label="Fachgespräch abbrechen">←</button><span>Frage {index + 1} von {fragen.length}</span><b className="talk-timer">{formatiereZeit(dauer)}</b></div>
-      <div className="session-progress"><i style={{ transform: `scaleX(${(index + 1) / Math.max(1, fragen.length)})` }} /></div>
+      <div className="talk-topbar"><button className="back" onClick={onAbbrechen} aria-label="Fachgespräch abbrechen">←</button><span>Frage {index + 1} von {angezeigteAnzahl}</span><b className="talk-timer">{formatiereZeit(dauer)}</b></div>
+      <div className="session-progress"><i style={{ transform: `scaleX(${(index + 1) / Math.max(1, angezeigteAnzahl)})` }} /></div>
       <div className="talk-session-grid">
         <aside className="talk-brief">
           <span>{szenario.code}</span><h2>{szenario.titel}</h2><p>{szenario.auftrag}</p>

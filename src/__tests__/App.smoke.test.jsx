@@ -39,7 +39,7 @@ describe('App smoke test', () => {
     render(<App />);
     fireEvent.click(screen.getByRole('button', { name: /Fachgespräch/ }));
     fireEvent.click(screen.getByRole('button', { name: /Fachgespräch erstellen und starten/ }));
-    expect(screen.getByText(/Frage 1 von 4/)).toBeInTheDocument();
+    expect(screen.getByText(/Frage 1 von 5/)).toBeInTheDocument();
     const antwort = screen.getByPlaceholderText(/Antworte in vollständigen/);
     fireEvent.change(antwort, { target: { value: 'Ich kläre Sehaufgabe und Nutzung, vermesse Raum und Bestand, prüfe ASR und Gefährdungsbeurteilung sowie Staub und IP.' } });
     fireEvent.click(screen.getByRole('button', { name: 'Antwort auswerten' }));
