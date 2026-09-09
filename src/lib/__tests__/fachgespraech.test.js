@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { FACHGESPRAECH_SZENARIEN } from "../../data/fachgespraech.js";
-import { adaptiveFolgefrage, bewerteFachantwort, erstelleFachgespraech, fachgespraechProtokoll, ihkNote } from "../fachgespraech.js";
+import { WEITERE_FACHGESPRAECH_SZENARIEN } from "../../data/fachgespraechErweitert.js";
+import { adaptiveFolgefrage, bewerteFachantwort, erstelleEigenesSzenario, erstelleFachgespraech, fachgespraechProtokoll, ihkNote, zufaelligesSzenario } from "../fachgespraech.js";
 
 describe("Fachgespräch", () => {
   it("bewertet fachliche Kernpunkte transparent statt per exaktem Satz", () => {
@@ -39,5 +40,46 @@ describe("Fachgespräch", () => {
       { frage: { phase: "kontrolle" }, bewertung: { prozent: 50 } },
     ];
     expect(fachgespraechProtokoll(antworten).punkte).toBe(69);
+  });
+
+  it("liefert neue Aufträge aus Installation, Steuerung und Energie", () => {
+    expect(WEITERE_FACHGESPRAECH_SZENARIEN).toHaveLength(4);
+    expect(new Set(WEITERE_FACHGESPRAECH_SZENARIEN.map((item) => item.kategorie))).toEqual(new Set(["installation", "steuerung", "energie"]));
+    WEITERE_FACHGESPRAECH_SZENARIEN.forEach((szenario) => {
+      expect(szenario.fragen).toHaveLength(6);
+      expect(new Set(szenario.fragen.map((frage) => frage.phase))).toEqual(new Set(["information", "planung", "durchfuehrung", "kontrolle"]));
+    });
+  });
+
+  it("teilt einen Zufallsauftrag nur aus dem gewählten Fachgebiet zu", () => {
+    const auswahl = zufaelligesSzenario(WEITERE_FACHGESPRAECH_SZENARIEN, "steuerung", () => 0.99);
+    expect(auswahl.kategorie).toBe("steuerung");
+    expect(zufaelligesSzenario([], "alle")).toBeNull();
+  });
+
+  it("erstellt einen lokalen Fragenlauf für einen eigenen Auftrag", () => {
+    const szenario = erstelleEigenesSzenario({
+      titel: "Eigene Unterverteilung",
+      auftrag: "Eine Unterverteilung soll erweitert und anschließend vollständig geprüft werden.",
+      rahmen: "TN-S;Leitungsweg 25 m",
+      schwerpunkt: "installation",
+    });
+    expect(szenario.eigenerAuftrag).toBe(true);
+    expect(szenario.daten).toEqual(["TN-S", "Leitungsweg 25 m"]);
+    expect(erstelleFachgespraech(szenario, 7, "fortgeschritten", () => 0.5)).toHaveLength(6);
+    expect(adaptiveFolgefrage(szenario.fragen[0], { anteil: 1 })).not.toBeNull();
+  });
+
+  it("nennt starke Phasen und priorisiert wiederholt fehlende Lernpunkte", () => {
+    const antworten = [
+      { frage: { phase: "information" }, bewertung: { prozent: 100, fehlend: [] } },
+      { frage: { phase: "planung" }, bewertung: { prozent: 40, fehlend: [{ titel: "Schutz", erklaerung: "Schutz begründen." }] } },
+      { frage: { phase: "durchfuehrung" }, bewertung: { prozent: 50, fehlend: [{ titel: "Schutz", erklaerung: "Schutz begründen." }] } },
+      { frage: { phase: "kontrolle" }, bewertung: { prozent: 80, fehlend: [{ titel: "Protokoll", erklaerung: "Werte dokumentieren." }] } },
+    ];
+    const protokoll = fachgespraechProtokoll(antworten);
+    expect(protokoll.staerken.map((phase) => phase.id)).toEqual(["information", "kontrolle"]);
+    expect(protokoll.lernfelder.map((phase) => phase.id)).toEqual(["planung", "durchfuehrung"]);
+    expect(protokoll.lernempfehlungen[0]).toMatchObject({ titel: "Schutz", anzahl: 2 });
   });
 });

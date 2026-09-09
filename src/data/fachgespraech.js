@@ -10,6 +10,9 @@ const kp = (titel, begriffe, erklaerung) => ({ titel, begriffe, erklaerung });
 export const FACHGESPRAECH_SZENARIEN = [
   {
     id: "halle",
+    kategorie: "licht",
+    icon: "factory",
+    quellenIds: ["asr-a3-4-2023", "din-en-12464-1"],
     titel: "Montagehalle auf LED umrüsten",
     code: "MODERNISIERUNG / HALLE",
     kurz: "Bestand aufnehmen, Lichtqualität planen und die Anlage sicher übergeben.",
@@ -129,6 +132,9 @@ export const FACHGESPRAECH_SZENARIEN = [
   },
   {
     id: "buero",
+    kategorie: "licht",
+    icon: "light",
+    quellenIds: ["asr-a3-4-2023", "iec-62386-dali"],
     titel: "Büro- und Bildschirmarbeitsplatz planen",
     code: "NEUANLAGE / BÜRO",
     kurz: "500 lx sicher erreichen, Reflexblendung vermeiden und Tageslicht nutzen.",
@@ -248,6 +254,9 @@ export const FACHGESPRAECH_SZENARIEN = [
   },
   {
     id: "stoerung",
+    kategorie: "fehlersuche",
+    icon: "problem",
+    quellenIds: ["eu-licht-ecodesign", "vde-0100-600"],
     titel: "Flackernde LED-Anlage untersuchen",
     code: "FEHLERSUCHE / LED",
     kurz: "Ursache systematisch eingrenzen, sicher messen und die Lösung nachweisen.",
@@ -366,4 +375,3 @@ export const FACHGESPRAECH_SZENARIEN = [
     ],
   },
 ];
-
