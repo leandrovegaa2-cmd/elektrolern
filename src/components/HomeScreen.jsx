@@ -18,6 +18,7 @@ export default function HomeScreen({
   onRechentrainer,
   onInteraktiv,
   onFachgespraech,
+  onMultimeter,
   onLichttechnik,
   onFehlerheft,
   onReset,
@@ -115,6 +116,12 @@ export default function HomeScreen({
           <span className="training-icon" aria-hidden="true"><Icon name="circuit" /></span>
           <span className="q-titel">Interaktiv</span>
           <span className="q-sub">Sortieren &amp; zuordnen</span>
+        </button>
+        <button className="training-card training-card-meter" onClick={onMultimeter}>
+          <span className="training-code">DMM / REAL</span>
+          <span className="training-icon" aria-hidden="true"><Icon name="multimeter" /></span>
+          <span className="q-titel">Multimeter</span>
+          <span className="q-sub">Leitungen, Buchsen und Messpunkte frei wählen</span>
         </button>
         <button className="training-card training-card-talk" onClick={onFachgespraech}>
           <span className="training-code">DIALOG</span>

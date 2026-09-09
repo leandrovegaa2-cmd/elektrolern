@@ -24,6 +24,7 @@ import LootboxScreen from "./components/LootboxScreen.jsx";
 import { useRewards } from "./hooks/useRewards.js";
 import SlotCasino from "./components/SlotCasino.jsx";
 import FachgespraechSimulator from "./components/FachgespraechSimulator.jsx";
+import MultimeterLab from "./components/MultimeterLab.jsx";
 
 export default function App() {
   const progress = useProgress();
@@ -74,6 +75,7 @@ export default function App() {
         return gehHeim();
       case "interaktiv":
       case "fachgespraech":
+      case "multimeter":
         return gehHeim();
       case "editor":
         return setScreen("stats");
@@ -229,9 +231,14 @@ export default function App() {
     setScreen("fachgespraech");
   }
 
+  function onMultimeter() {
+    setSessionKey((k) => k + 1);
+    setScreen("multimeter");
+  }
+
   // Globale Tastenkürzel. Buchstaben (nicht Ziffern), damit im Quiz die 1–4
   // frei bleiben. Während Session nur „?" + Esc, sonst auch die Navigation.
-  const istSession = ["flash", "quiz", "rechnen", "pruefung", "interaktiv", "fachgespraech"].includes(screen);
+  const istSession = ["flash", "quiz", "rechnen", "pruefung", "interaktiv", "fachgespraech", "multimeter"].includes(screen);
   const hotkeys = {
     "?": () => setHilfeOffen((v) => !v),
     Escape: aufEsc,
@@ -259,6 +266,7 @@ export default function App() {
     rechnen: "Rechnen",
     interaktiv: "Interaktiv üben",
     fachgespraech: "Fachgespräch",
+    multimeter: "Multimeter-Labor",
     fehlerheft: "Fehlerheft",
     editor: "Karten bearbeiten",
     pruefung: "Prüfungssimulation",
@@ -285,6 +293,7 @@ export default function App() {
           onRechentrainer={onRechentrainer}
           onInteraktiv={onInteraktiv}
           onFachgespraech={onFachgespraech}
+          onMultimeter={onMultimeter}
           onLichttechnik={() => oeffneReferenz("licht")}
           onFehlerheft={() => setScreen("fehlerheft")}
           onReset={onReset}
@@ -380,6 +389,14 @@ export default function App() {
           progress={progress}
           onAbbrechen={gehHeim}
           onLichttechnik={() => oeffneReferenz("licht")}
+        />
+      )}
+
+      {screen === "multimeter" && (
+        <MultimeterLab
+          key={"multimeter-" + sessionKey}
+          progress={progress}
+          onAbbrechen={gehHeim}
         />
       )}
 

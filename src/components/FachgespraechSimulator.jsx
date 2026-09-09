@@ -183,6 +183,50 @@ function Ergebnis({ szenario, antworten, dauer, modus, onNochmal, onHeim, onLich
   );
 }
 
+function useSpeechInput(text, setText, disabled) {
+  const recognitionRef = useRef(null);
+  const baseTextRef = useRef("");
+  const [listening, setListening] = useState(false);
+  const [speechError, setSpeechError] = useState("");
+  const supported = typeof window !== "undefined" && !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+
+  function stop() {
+    recognitionRef.current?.stop();
+  }
+
+  function start() {
+    if (!supported || disabled || listening) return;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    baseTextRef.current = text.trim();
+    recognition.lang = "de-DE";
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.onstart = () => { setListening(true); setSpeechError(""); };
+    recognition.onresult = (event) => {
+      let transcript = "";
+      for (let index = 0; index < event.results.length; index += 1) transcript += `${event.results[index][0].transcript} `;
+      setText([baseTextRef.current, transcript.trim()].filter(Boolean).join(" "));
+    };
+    recognition.onerror = (event) => {
+      setSpeechError(event.error === "not-allowed" ? "Mikrofonzugriff wurde nicht erlaubt. Du kannst normal weiterschreiben." : "Sprache wurde nicht sicher erkannt. Versuche es erneut oder schreibe weiter.");
+    };
+    recognition.onend = () => { setListening(false); recognitionRef.current = null; };
+    recognitionRef.current = recognition;
+    try {
+      recognition.start();
+    } catch {
+      recognitionRef.current = null;
+      setSpeechError("Die Aufnahme konnte nicht gestartet werden. Du kannst normal weiterschreiben.");
+    }
+  }
+
+  useEffect(() => () => recognitionRef.current?.abort(), []);
+  useEffect(() => { if (disabled && recognitionRef.current) recognitionRef.current.stop(); }, [disabled]);
+
+  return { supported, listening, speechError, start, stop };
+}
+
 export default function FachgespraechSimulator({ progress, onAbbrechen, onLichttechnik }) {
   const [status, setStatus] = useState("setup");
   const [szenario, setSzenario] = useState(null);
@@ -197,6 +241,7 @@ export default function FachgespraechSimulator({ progress, onAbbrechen, onLichtt
   const [dauer, setDauer] = useState(0);
   const [adaptivGenutzt, setAdaptivGenutzt] = useState(false);
   const startRef = useRef(0);
+  const speech = useSpeechInput(antwort, setAntwort, !!feedback);
 
   useEffect(() => {
     if (status !== "session") return undefined;
@@ -235,6 +280,7 @@ export default function FachgespraechSimulator({ progress, onAbbrechen, onLichtt
   function bewerten() {
     const frage = fragen[index];
     if (!frage || antwort.trim().length < 12 || feedback) return;
+    speech.stop();
     const bewertung = bewerteFachantwort(antwort, frage.kernpunkte);
     setAntworten((bisher) => [...bisher, { frage, antwort: antwort.trim(), bewertung }]);
     verbuchen(frage, bewertung);
@@ -253,6 +299,7 @@ export default function FachgespraechSimulator({ progress, onAbbrechen, onLichtt
   }
 
   function weiter() {
+    speech.stop();
     if (index + 1 >= fragen.length) beenden();
     else { setIndex((wert) => wert + 1); setAntwort(""); setFeedback(null); }
   }
@@ -280,7 +327,12 @@ export default function FachgespraechSimulator({ progress, onAbbrechen, onLichtt
           {frage.adaptiv ? <span className="talk-adaptive"><Icon name="trend" size={14} /> Nachfrage passend zur vorherigen Antwort</span> : null}
           {modus === "pruefung" ? <span className="talk-exam-badge"><Icon name="lock" size={14} /> Auswertung bis zum Ende gesperrt</span> : null}
           <div className="talk-examiner"><span aria-hidden="true"><Icon name="conversation" size={24} /></span><div><small>Prüfungsausschuss</small><h1>{frage.frage}</h1></div></div>
-          <label className="talk-answer"><span>Deine fachliche Antwort</span><textarea autoFocus value={antwort} disabled={!!feedback} onChange={(event) => setAntwort(event.target.value)} placeholder="Antworte in vollständigen Stichpunkten oder Sätzen. Begründe dein Vorgehen …" /></label>
+          <div className="talk-answer">
+            <div className="talk-answer-head"><label htmlFor="talk-answer-input">Deine fachliche Antwort</label><button type="button" className={speech.listening ? "listening" : ""} onClick={speech.listening ? speech.stop : speech.start} disabled={!!feedback || !speech.supported} title={speech.supported ? "Antwort diktieren" : "Spracheingabe wird von diesem Browser nicht unterstützt"}><Icon name="microphone" size={16} /> {speech.listening ? "Aufnahme stoppen" : "Antwort sprechen"}</button></div>
+            <textarea id="talk-answer-input" autoFocus value={antwort} disabled={!!feedback} onChange={(event) => setAntwort(event.target.value)} placeholder="Antworte in vollständigen Stichpunkten oder Sätzen. Begründe dein Vorgehen …" />
+            {speech.listening ? <p className="talk-speech-state" aria-live="polite"><i /> Mikrofon aktiv — sprich deine Antwort. Du kannst den Text gleichzeitig korrigieren.</p> : null}
+            {speech.speechError ? <p className="talk-speech-error" aria-live="polite">{speech.speechError}</p> : null}
+          </div>
           {feedback ? (
             <section className={`talk-feedback ${feedback.niveau}`} aria-live="polite">
               <div className="talk-feedback-score"><span>Kernpunkte abgedeckt</span><b>{feedback.prozent}%</b><small>{feedback.treffer.length} von {feedback.treffer.length + feedback.fehlend.length}</small></div>
