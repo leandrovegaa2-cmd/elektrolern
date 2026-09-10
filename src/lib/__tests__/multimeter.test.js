@@ -53,4 +53,28 @@ describe("realistischer Multimeter-Simulator", () => {
     expect(evaluateMeasurement(scenario("tuerkontakt-strom"), setup).correct).toBe(true);
     expect(evaluateMeasurement(scenario("tuerkontakt-strom"), { ...setup, redJack: "10a" }).correct).toBe(false);
   });
+
+  it("zeigt OL, wenn der manuelle Spannungsbereich zu klein ist", () => {
+    const setup = { mode: "vac", range: "60", redJack: "vohm", blackJack: "com", redPoint: "l", blackPoint: "n" };
+    const result = simulateMeasurement(scenario("steckdose-spannung"), setup);
+    expect(result).toMatchObject({ status: "overload", display: "OL" });
+    expect(evaluateMeasurement(scenario("steckdose-spannung"), setup, result).correct).toBe(false);
+    expect(simulateMeasurement(scenario("steckdose-spannung"), { ...setup, range: "600" }).status).toBe("reading");
+  });
+
+  it("sperrt die Strommessung bei ausgelöster Gerätesicherung", () => {
+    const setup = { mode: "adc", range: "auto", redJack: "ma", blackJack: "com", redPoint: "left", blackPoint: "right", fuseOk: false };
+    expect(simulateMeasurement(scenario("tuerkontakt-strom"), setup)).toMatchObject({ status: "fuse", display: "FUSE" });
+  });
+
+  it("bildet typische Fälle aus Energie- und Gebäudetechnik ab", () => {
+    expect(MULTIMETER_SZENARIEN).toHaveLength(8);
+    expect(MULTIMETER_SZENARIEN.every((item) => item.diagnosis.options.filter((option) => option.correct).length === 1)).toBe(true);
+    const knx = { mode: "vdc", range: "60", redJack: "vohm", blackJack: "com", redPoint: "plus", blackPoint: "minus" };
+    expect(simulateMeasurement(scenario("knx-busspannung"), knx)).toMatchObject({ status: "reading", display: "29.2", unit: "V" });
+    const drehstrom = { mode: "vac", range: "600", redJack: "vohm", blackJack: "com", redPoint: "l1", blackPoint: "l2" };
+    expect(simulateMeasurement(scenario("unterverteilung-drehstrom"), drehstrom)).toMatchObject({ status: "reading", display: "400.6" });
+    const licht = { mode: "vac", range: "60", redJack: "vohm", blackJack: "com", redPoint: "lsw", blackPoint: "n" };
+    expect(simulateMeasurement(scenario("licht-schaltader-fehlt"), licht)).toMatchObject({ status: "reading", display: "0.0" });
+  });
 });

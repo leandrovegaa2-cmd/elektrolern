@@ -39,6 +39,7 @@ export default function Icon({ name, size = 20, className = "" }) {
     exam: <><path d="M7 3h10v3h3v15H4V6h3V3Z"/><path d="M8 11h8m-8 4h5"/></>,
     calculator: <><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8v3H8zm0 7h.01m4-.01h.01m4 .01h.01M8 18h.01m4-.01h.01m4 .01h.01"/></>,
     multimeter: <><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><rect x="8" y="5.5" width="8" height="4" rx=".7"/><circle cx="12" cy="14" r="2.7"/><path d="M12 11.3V9.8M8.5 19h.01m7-.01h.01M7 21.5 4 24m10-2.5 3 2.5"/></>,
+    fuse: <><path d="M3 12h4m10 0h4"/><rect x="7" y="8" width="10" height="8" rx="2"/><path d="M9.5 12h5M8 6v2m8-2v2m-8 8v2m8-2v2"/></>,
     resistor: <><path d="M3 12h3l1.5-3 3 6 3-6 3 6 1.5-3h3"/><path d="M5 7v10m14-10v10"/></>,
     problem: <><path d="M12 3 3 8v8l9 5 9-5V8l-9-5Z"/><path d="M9.5 10a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .8-1 1.7m0 3h.01"/></>,
     keyboard: <><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01m3-.01h.01m3 .01h.01m3-.01h.01M7 14h10"/></>,

@@ -1,4 +1,4 @@
-import { MULTIMETER_MODES } from "../data/multimeter.js";
+import { MULTIMETER_MODES, MULTIMETER_RANGES } from "../data/multimeter.js";
 
 const modeById = Object.fromEntries(MULTIMETER_MODES.map((mode) => [mode.id, mode]));
 
@@ -19,6 +19,21 @@ function reversed(measurement, setup) {
   return measurement.between[0] === setup.blackPoint && measurement.between[1] === setup.redPoint;
 }
 
+function valueInBaseUnit(measurement) {
+  if (measurement.unit === "mA") return measurement.value / 1000;
+  if (measurement.unit === "kΩ") return measurement.value * 1000;
+  return measurement.value;
+}
+
+export function rangesForMode(modeId) {
+  return MULTIMETER_RANGES[modeId] || MULTIMETER_RANGES.off;
+}
+
+export function selectedRange(modeId, rangeId = "auto") {
+  const ranges = rangesForMode(modeId);
+  return ranges.find((range) => range.id === rangeId) || ranges[0];
+}
+
 export function simulateMeasurement(scenario, setup) {
   const mode = modeById[setup.mode] || modeById.off;
   if (mode.type === "off") {
@@ -29,6 +44,15 @@ export function simulateMeasurement(scenario, setup) {
   }
   if (setup.blackJack !== "com") {
     return { status: "invalid", display: "LEAd", unit: "", title: "Schwarze Leitung falsch gesteckt", explanation: "Die schwarze Messleitung gehört für diese Aufgaben in COM." };
+  }
+  if (mode.type === "current" && setup.fuseOk === false) {
+    return {
+      status: "fuse",
+      display: "FUSE",
+      unit: "",
+      title: "Stromeingang gesperrt",
+      explanation: "Die Gerätesicherung hat nach einem gefährlichen Stromaufbau ausgelöst. Trenne die simulierten Messleitungen und ersetze die Sicherung, bevor du erneut Strom misst.",
+    };
   }
   if (!setup.redPoint || !setup.blackPoint) {
     return { status: "idle", display: "----", unit: "", title: "Messspitzen frei", explanation: "Wähle Rot oder Schwarz und setze beide Messspitzen an Messpunkte." };
@@ -80,6 +104,17 @@ export function simulateMeasurement(scenario, setup) {
     };
   }
 
+  const range = selectedRange(setup.mode, setup.range);
+  if (range.max !== null && Math.abs(valueInBaseUnit(measurement)) > range.max) {
+    return {
+      status: "overload",
+      display: "OL",
+      unit: measurement.unit,
+      title: "Messbereich überschritten",
+      explanation: `Der gewählte Bereich ${range.label} ist für diesen Wert zu klein. Wähle AUTO oder den nächsthöheren Bereich.`,
+    };
+  }
+
   const dcReverse = setup.mode === "vdc" && reversed(measurement, setup);
   const tenAmpRange = mode.type === "current" && setup.redJack === "10a" && measurement.unit === "mA";
   const shownDisplay = tenAmpRange ? (measurement.value / 1000).toFixed(3) : measurement.display;
@@ -96,7 +131,7 @@ export function simulateMeasurement(scenario, setup) {
 export function evaluateMeasurement(scenario, setup, result = simulateMeasurement(scenario, setup)) {
   const issues = [];
   const expected = scenario.expected;
-  if (result.status === "danger") issues.push(result.explanation);
+  if (result.status === "danger" || result.status === "fuse" || result.status === "overload") issues.push(result.explanation);
   else {
     if (setup.blackJack !== expected.blackJack) issues.push("Schwarze Leitung in COM stecken.");
     if (setup.redJack !== expected.redJack) issues.push(`Rote Leitung in ${expected.redJack === "vohm" ? "V/Ω" : expected.redJack === "ma" ? "mA/µA" : "10 A"} stecken.`);

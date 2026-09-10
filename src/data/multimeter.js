@@ -15,6 +15,16 @@ export const MULTIMETER_JACKS = [
   { id: "vohm", label: "V / Ω", color: "red" },
 ];
 
+export const MULTIMETER_RANGES = {
+  off: [{ id: "auto", label: "AUTO", max: null }],
+  vac: [{ id: "auto", label: "AUTO", max: null }, { id: "60", label: "60 V", max: 60 }, { id: "600", label: "600 V", max: 600 }],
+  vdc: [{ id: "auto", label: "AUTO", max: null }, { id: "60", label: "60 V", max: 60 }, { id: "600", label: "600 V", max: 600 }],
+  ohm: [{ id: "auto", label: "AUTO", max: null }, { id: "600", label: "600 Ω", max: 600 }, { id: "6k", label: "6 kΩ", max: 6000 }, { id: "60k", label: "60 kΩ", max: 60000 }],
+  continuity: [{ id: "auto", label: "AUTO", max: null }],
+  aac: [{ id: "auto", label: "AUTO", max: null }, { id: "600ma", label: "600 mA", max: 0.6 }, { id: "10a", label: "10 A", max: 10 }],
+  adc: [{ id: "auto", label: "AUTO", max: null }, { id: "600ma", label: "600 mA", max: 0.6 }, { id: "10a", label: "10 A", max: 10 }],
+};
+
 export const MULTIMETER_SZENARIEN = [
   {
     id: "steckdose-spannung",
@@ -40,6 +50,14 @@ export const MULTIMETER_SZENARIEN = [
     ],
     expected: { mode: "vac", redJack: "vohm", blackJack: "com", pair: ["l", "n"], allowReverse: true },
     erfolg: "V~ gewählt, Leitungen in COM und V/Ω, Messspitzen parallel an L und N.",
+    diagnosis: {
+      question: "Welche Aussage ist durch den Messwert von 230,4 V am besten belegt?",
+      options: [
+        { id: "plausible", text: "Zwischen L und N liegt eine plausible Netzspannung an.", correct: true, explanation: "Der Wert ist für diese simulierte 230-V-Versorgung plausibel. Er bestätigt allein aber nicht die vollständige Sicherheit der Anlage." },
+        { id: "pe-ok", text: "Der Schutzleiter ist damit vollständig geprüft.", correct: false, explanation: "Eine Spannungsmessung L–N ersetzt weder Schutzleiter- noch Schleifen- oder Isolationsprüfung." },
+        { id: "fault", text: "Der Neutralleiter ist sicher unterbrochen.", correct: false, explanation: "Der gemessene Wert spricht in diesem Szenario gerade nicht für diese Schlussfolgerung." },
+      ],
+    },
     praxis: "Vor einer realen Messung müssen Messgerät, Leitungen, Messkategorie und zulässige Spannung zur Anlage passen.",
     quellenIds: ["dguv-203-072", "fluke-messleitungen"],
   },
@@ -65,6 +83,14 @@ export const MULTIMETER_SZENARIEN = [
     ],
     expected: { mode: "vdc", redJack: "vohm", blackJack: "com", pair: ["plus", "minus"], allowReverse: false },
     erfolg: "V= zeigt bei korrekter Polarität einen positiven Wert nahe 24 V.",
+    diagnosis: {
+      question: "Wie ist der positive Messwert von 24,18 V zu bewerten?",
+      options: [
+        { id: "supply", text: "Versorgung und gemessene Polarität sind plausibel.", correct: true, explanation: "Rot liegt am Pluspol, Schwarz am Minuspol; der Betrag passt zur beschriebenen 24-V-Versorgung." },
+        { id: "ac", text: "Die Versorgung liefert 24 V Wechselspannung.", correct: false, explanation: "Gemessen wurde in V=. Der positive Wert beschreibt Gleichspannung und die gewählte Polarität." },
+        { id: "short", text: "Der Messwert beweist einen Kurzschluss.", correct: false, explanation: "Aus dieser Leerlauf-Spannungsmessung lässt sich kein Kurzschluss ableiten." },
+      ],
+    },
     praxis: "Bei vertauschten Messspitzen bleibt der Betrag gleich, das Minuszeichen zeigt aber die umgekehrte Polarität.",
     quellenIds: ["fluke-messleitungen"],
   },
@@ -91,6 +117,14 @@ export const MULTIMETER_SZENARIEN = [
     ],
     expected: { mode: "continuity", redJack: "vohm", blackJack: "com", pair: ["switch", "lamp"], allowReverse: true },
     erfolg: "Durchgangsfunktion, spannungsfreier Stromkreis und beide Enden derselben Ader.",
+    diagnosis: {
+      question: "Was bedeutet der Durchgangston bei 0,24 Ω?",
+      options: [
+        { id: "continuous", text: "Die geprüfte Ader ist niederohmig durchgängig.", correct: true, explanation: "Der niedrige Widerstand und der Ton sprechen für Durchgang; enthalten sind auch Leitungs- und Kontaktwiderstände." },
+        { id: "norm-test", text: "Damit ist die gesamte Anlage normgerecht geprüft.", correct: false, explanation: "Die einfache Durchgangsprüfung ersetzt keine vollständige Prüfung mit den vorgesehenen Prüfverfahren." },
+        { id: "voltage", text: "Auf der Ader liegen 0,24 V an.", correct: false, explanation: "Die Anzeige steht hier in Ω, nicht in Volt." },
+      ],
+    },
     praxis: "Eine Durchgangsprüfung ersetzt keine normgerechte Schutzleiter- oder Isolationsmessung mit dem dafür vorgesehenen Prüfgerät.",
     quellenIds: ["dguv-203-072", "fluke-messleitungen"],
   },
@@ -116,6 +150,14 @@ export const MULTIMETER_SZENARIEN = [
     ],
     expected: { mode: "ohm", redJack: "vohm", blackJack: "com", pair: ["h1", "h2"], allowReverse: true },
     erfolg: "Ω-Funktion an der vollständig abgetrennten Last; der Messwert lässt sich rechnerisch plausibilisieren.",
+    diagnosis: {
+      question: "Welche Beurteilung passt zu 52,9 Ω bei einem 1-kW-Heizelement für 230 V?",
+      options: [
+        { id: "matches", text: "Der Wert passt näherungsweise zu U² / P.", correct: true, explanation: "230² / 1000 ergibt rund 52,9 Ω. Temperatur und Fertigungstoleranz können reale Werte beeinflussen." },
+        { id: "open", text: "Das Heizelement ist eindeutig unterbrochen.", correct: false, explanation: "Eine Unterbrechung würde typischerweise als sehr hoher Widerstand beziehungsweise OL erscheinen." },
+        { id: "live", text: "Das Heizelement kann dabei unter Spannung bleiben.", correct: false, explanation: "Widerstand wird nur am sicher spannungsfreien und abgetrennten Bauteil gemessen." },
+      ],
+    },
     praxis: "Widerstände niemals an einem unter Spannung stehenden Bauteil messen.",
     quellenIds: ["fluke-messleitungen"],
   },
@@ -143,7 +185,119 @@ export const MULTIMETER_SZENARIEN = [
     ],
     expected: { mode: "adc", redJack: "ma", blackJack: "com", pair: ["left", "right"], allowReverse: true },
     erfolg: "A= gewählt, rote Leitung im mA-Eingang und das Messgerät in Reihe in die vorbereitete Messlücke eingesetzt.",
+    diagnosis: {
+      question: "Was sagt ein Betriebsstrom von 182,6 mA in diesem Auftrag aus?",
+      options: [
+        { id: "expected", text: "Der Strom liegt nahe dem erwarteten Wert von etwa 180 mA.", correct: true, explanation: "Der gemessene Betriebsstrom ist für den beschriebenen Zustand plausibel; für eine Enddiagnose wären Herstellerdaten und Betriebsbedingungen heranzuziehen." },
+        { id: "parallel", text: "Die Messung wurde korrekt parallel zur Quelle ausgeführt.", correct: false, explanation: "Strom wird in Reihe gemessen. Eine Parallelschaltung im Strombereich wäre gefährlich." },
+        { id: "amps", text: "Es fließen 182,6 A.", correct: false, explanation: "Die Anzeige steht in mA. 182,6 mA entsprechen 0,1826 A." },
+      ],
+    },
     praxis: "Ein Strombereich darf niemals parallel an eine Spannungsquelle gelegt werden. Das kann Messgerätesicherung, Leitungen und Person gefährden.",
+    quellenIds: ["dguv-203-072", "fluke-messleitungen"],
+  },
+  {
+    id: "unterverteilung-drehstrom",
+    code: "NETZ / 06",
+    titel: "Drehstrom prüfen",
+    kurz: "Verkettete Spannung in der Unterverteilung messen",
+    auftrag: "Miss die Wechselspannung zwischen den Außenleitern L1 und L2.",
+    kontext: "Unterverteilung · Drehstromsystem in Betrieb · Prüfpunkt für die Simulation freigegeben",
+    energized: true,
+    supply: "400 / 230 V AC",
+    cardId: 13,
+    visual: "distribution",
+    points: [
+      { id: "l1", label: "L1", detail: "Außenleiter 1", x: 19, y: 57, tone: "phase" },
+      { id: "l2", label: "L2", detail: "Außenleiter 2", x: 40, y: 35, tone: "phase" },
+      { id: "l3", label: "L3", detail: "Außenleiter 3", x: 61, y: 57, tone: "phase" },
+      { id: "n", label: "N", detail: "Neutralleiter", x: 81, y: 35, tone: "neutral" },
+    ],
+    wires: [["l1", "l2"], ["l2", "l3"], ["l3", "n"]],
+    measurements: [
+      { mode: "vac", between: ["l1", "l2"], display: "400.6", value: 400.6, unit: "V", interpretation: "Zwischen zwei Außenleitern liegt eine plausible verkettete Spannung an." },
+      { mode: "vac", between: ["l1", "n"], display: "230.3", value: 230.3, unit: "V", interpretation: "Zwischen L1 und N liegt eine plausible Strangspannung an." },
+      { mode: "vac", between: ["l2", "n"], display: "230.1", value: 230.1, unit: "V", interpretation: "Zwischen L2 und N liegt eine plausible Strangspannung an." },
+    ],
+    expected: { mode: "vac", redJack: "vohm", blackJack: "com", pair: ["l1", "l2"], allowReverse: true },
+    erfolg: "V~ und V/Ω-Eingang gewählt, Messspitzen parallel zwischen L1 und L2, Messbereich ausreichend groß.",
+    diagnosis: {
+      question: "Welche Aussage wird durch rund 400 V zwischen L1 und L2 gestützt?",
+      options: [
+        { id: "line-voltage", text: "Die verkettete Spannung zwischen diesen Außenleitern ist plausibel.", correct: true, explanation: "Der Wert passt zum beschriebenen 400/230-V-Drehstromsystem. Andere Leiter und Schutzmaßnahmen sind damit noch nicht geprüft." },
+        { id: "neutral", text: "Der Neutralleiter ist damit vollständig geprüft.", correct: false, explanation: "N war an dieser Messung nicht beteiligt." },
+        { id: "safe", text: "Die gesamte Unterverteilung ist damit sicher.", correct: false, explanation: "Eine einzelne Spannungsmessung erlaubt keine vollständige Sicherheitsbewertung." },
+      ],
+    },
+    praxis: "Für Arbeiten an Verteilungen sind Gefährdungsbeurteilung, geeignete persönliche Schutzausrüstung, Messkategorie und ein zur Anlage passendes Prüfgerät entscheidend.",
+    quellenIds: ["dguv-203-072", "fluke-messbereich", "vde-0100-600"],
+  },
+  {
+    id: "knx-busspannung",
+    code: "BUS / 07",
+    titel: "KNX-TP-Bus prüfen",
+    kurz: "Busspannung und Polarität kontrollieren",
+    auftrag: "Miss die Gleichspannung zwischen der roten KNX-Busklemme (+) und der schwarzen Busklemme (−).",
+    kontext: "KNX-TP-Linie in Betrieb · Spannungsversorgung eingeschaltet · Datenverkehr möglich",
+    energized: true,
+    supply: "29 V DC · SELV",
+    cardId: 51,
+    visual: "control",
+    points: [
+      { id: "plus", label: "+", detail: "KNX rot", x: 28, y: 57, tone: "phase" },
+      { id: "bus", label: "TP", detail: "Buslinie", x: 50, y: 31, tone: "signal" },
+      { id: "minus", label: "−", detail: "KNX schwarz", x: 72, y: 57, tone: "neutral" },
+    ],
+    wires: [["plus", "bus"], ["bus", "minus"]],
+    measurements: [
+      { mode: "vdc", between: ["plus", "minus"], display: "29.2", value: 29.2, unit: "V", interpretation: "Die gemessene Busspannung liegt im typischen Bereich der beschriebenen KNX-TP-Linie." },
+    ],
+    expected: { mode: "vdc", redJack: "vohm", blackJack: "com", pair: ["plus", "minus"], allowReverse: false },
+    erfolg: "V= und V/Ω-Eingang gewählt, Rot an Plus und Schwarz an Minus; die Polarität ist eindeutig.",
+    diagnosis: {
+      question: "Was darfst du aus 29,2 V DC am KNX-Bus ableiten?",
+      options: [
+        { id: "voltage-ok", text: "Die Versorgungsspannung ist plausibel; Telegrammverkehr ist damit nicht bewiesen.", correct: true, explanation: "Die Spannungsmessung beurteilt die Versorgung. Für Kommunikation, Topologie und Teilnehmerfunktion sind weitere Prüfungen nötig." },
+        { id: "all-ok", text: "Alle KNX-Teilnehmer kommunizieren fehlerfrei.", correct: false, explanation: "Eine passende Busspannung belegt nicht automatisch fehlerfreien Datenverkehr oder korrekt parametrierte Geräte." },
+        { id: "mains", text: "Am Bus liegt normale 230-V-Netzspannung an.", correct: false, explanation: "KNX TP nutzt in diesem Szenario eine SELV-Gleichspannung um 29 V, keine 230-V-Netzspannung." },
+      ],
+    },
+    praxis: "KNX-Bus und 230-V-Seite müssen eindeutig getrennt behandelt werden. Die Spannungsmessung ersetzt keine Diagnose mit ETS oder Busmonitor.",
+    quellenIds: ["knx-tp-spannung", "fluke-messleitungen"],
+  },
+  {
+    id: "licht-schaltader-fehlt",
+    code: "LICHT / 08",
+    titel: "Leuchte bleibt dunkel",
+    kurz: "Spannung an der geschalteten Ader eingrenzen",
+    auftrag: "Der Lichtschalter steht auf EIN. Miss an der Leuchte zwischen geschaltetem Außenleiter L′ und N.",
+    kontext: "Beleuchtungsstromkreis in Betrieb · Leuchtmittel geprüft · Fehlersuche an vorbereiteter Messstelle",
+    energized: true,
+    supply: "230 V AC · Fehlerfall",
+    cardId: 13,
+    visual: "lighting",
+    points: [
+      { id: "l", label: "L", detail: "Dauerphase", x: 20, y: 34, tone: "phase" },
+      { id: "lsw", label: "L′", detail: "geschaltet", x: 44, y: 61, tone: "signal" },
+      { id: "n", label: "N", detail: "Neutralleiter", x: 70, y: 61, tone: "neutral" },
+      { id: "pe", label: "PE", detail: "Schutzleiter", x: 82, y: 31, tone: "earth" },
+    ],
+    wires: [["l", "lsw"], ["lsw", "n"], ["n", "pe"]],
+    measurements: [
+      { mode: "vac", between: ["lsw", "n"], display: "0.0", value: 0, unit: "V", interpretation: "An L′ liegt gegenüber N trotz Schaltbefehl keine Spannung an. Der Schaltpfad muss weiter eingegrenzt werden." },
+      { mode: "vac", between: ["l", "n"], display: "230.2", value: 230.2, unit: "V", interpretation: "Die Versorgung am ungeschalteten Außenleiter ist vorhanden." },
+    ],
+    expected: { mode: "vac", redJack: "vohm", blackJack: "com", pair: ["lsw", "n"], allowReverse: true },
+    erfolg: "V~ und V/Ω-Eingang gewählt, Messung parallel zwischen L′ und N am vorbereiteten Leuchtenanschluss.",
+    diagnosis: {
+      question: "Welche nächste Schlussfolgerung ist bei 0,0 V zwischen L′ und N fachlich sauber?",
+      options: [
+        { id: "narrow", text: "Der geschaltete Pfad liefert keine Spannung; Eingang, Schalterausgang und Leitungsweg sind als Nächstes zu prüfen.", correct: true, explanation: "Die Messung grenzt den Fehler ein, benennt aber noch kein einzelnes defektes Bauteil." },
+        { id: "switch-certain", text: "Der Schalter ist zweifelsfrei defekt.", correct: false, explanation: "Auch fehlende Einspeisung, eine Unterbrechung oder ein Anschlussfehler können denselben Messwert verursachen." },
+        { id: "neutral-certain", text: "Der Neutralleiter ist zweifelsfrei in Ordnung.", correct: false, explanation: "Ein 0-V-Messwert allein beweist weder einen intakten N noch die genaue Fehlerstelle." },
+      ],
+    },
+    praxis: "Fehlersuche erfolgt schrittweise mit sicherem Bezugspunkt. Vor jeder Aussage prüfen, welche Fehlerursachen der einzelne Messwert wirklich ausschließt.",
     quellenIds: ["dguv-203-072", "fluke-messleitungen"],
   },
 ];
